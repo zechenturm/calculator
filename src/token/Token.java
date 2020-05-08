@@ -8,4 +8,9 @@ public class Token
     {
         this.content = content;
     }
+
+    public String toString()
+    {
+        return this.getClass() + "<" + content + ">";
+    }
 }
