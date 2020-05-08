@@ -191,5 +191,37 @@ public class LexerTest {
         assertEquals(t.content, ")");
     }
 
+    @Test
+    public void testAssign()
+    {
+        var l = new Lexer("x =");
+        var t = l.next();
+        assertEquals(AssignToken.class, t.getClass());
+        assertEquals("x", t.content);
+
+        l = new Lexer("abc =");
+        t = l.next();
+        assertEquals(AssignToken.class, t.getClass());
+        assertEquals("abc", t.content);
+
+        l = new Lexer("abc = 3");
+        t = l.next();
+        assertEquals(AssignToken.class, t.getClass());
+        assertEquals("abc", t.content);
+
+        t = l.next();
+        assertEquals(NumberToken.class, t.getClass());
+        assertEquals("3", t.content);
+
+        l = new Lexer("abc=3");
+        t = l.next();
+        assertEquals(AssignToken.class, t.getClass());
+        assertEquals("abc", t.content);
+
+        t = l.next();
+        assertEquals(NumberToken.class, t.getClass());
+        assertEquals("3", t.content);
+    }
+
 
 }
