@@ -2,21 +2,25 @@ package parser;
 
 import lexer.Lexer;
 import token.*;
-
-import java.util.HashMap;
-import java.util.Stack;
+import vm.Interpreter;
+import vm.VM;
 
 public class Parser
 {
-    Stack<Integer> stack = new Stack<>();
-    HashMap<String, Integer> vars = new HashMap<>();
+    private VM vm;
     private final Lexer lexer;
-    public Parser(Lexer l)
+    public Parser(Lexer l, VM vm)
     {
         lexer = l;
+        this.vm = vm;
     }
 
-    public int eval()
+    public Parser(Lexer l)
+    {
+        this(l, new Interpreter());
+    }
+
+    private void evaluate()
     {
         while (true)
         {
@@ -24,7 +28,7 @@ public class Parser
             if (currentToken instanceof EOFToken)
                 break;
             if (currentToken instanceof NumberToken)
-                stack.push(Integer.parseInt(currentToken.content));
+                vm.push(Integer.parseInt(currentToken.content));
 
             if (currentToken instanceof IdentToken)
             {
@@ -33,10 +37,10 @@ public class Parser
                 {
                     lexer.next();
                     var t = lexer.next();
-                    vars.put(currentToken.content, Integer.parseInt(t.content));
+                    vm.store(currentToken.content, Integer.parseInt(t.content));
                 }
                 else
-                    stack.push(vars.get(currentToken.content));
+                    vm.push(vm.load(currentToken.content));
             }
 
             if (currentToken instanceof OperatorToken)
@@ -47,34 +51,37 @@ public class Parser
                     if (t.content.equals(")"))
                         break;
                     else
-                        stack.push(eval());
+                        evaluate();
                 }
                 else
                     if (t instanceof NumberToken)
-                        stack.push(Integer.parseInt(t.content));
+                        vm.push(Integer.parseInt(t.content));
                     else
-                        stack.push(vars.get(t.content));
+                        vm.push(vm.load(t.content));
 
                 switch (currentToken.content) {
                     case "+":
                         handlePunktvStrich();
-                        add();
+                        vm.add();
                         break;
                     case "-":
                         handlePunktvStrich();
-                        sub();
+                        vm.sub();
                         break;
                     case "*":
-                        mul();
+                        vm.mul();
                         break;
                     case "/":
-                        div();
+                        vm.div();
                 }
             }
         }
-        if (stack.empty())
-            return 0;
-        return stack.pop();
+    }
+
+    public int eval()
+    {
+        evaluate();
+        return vm.pop();
     }
 
     private void handlePunktvStrich()
@@ -87,39 +94,15 @@ public class Parser
 
             var t = lexer.next();
             if (t.content.equals("("))
-                stack.push(eval());
+                evaluate();
             else
-                stack.push(Integer.parseInt(t.content));
+                vm.push(Integer.parseInt(t.content));
 
             if (tokenContent.equals("*"))
-                mul();
+                vm.mul();
             else
-                div();
+                vm.div();
             tokenContent = lexer.peek().content;
         }
-    }
-
-    private void add()
-    {
-        stack.push(stack.pop() + stack.pop());
-    }
-
-    private void sub()
-    {
-        var subtract = stack.pop();
-        var subtractFrom = stack.pop();
-        stack.push(subtractFrom - subtract);
-    }
-
-    private void mul()
-    {
-        stack.push(stack.pop() * stack.pop());
-    }
-
-    private void div()
-    {
-        var dividend = stack.pop();
-        var divisor = stack.pop();
-        stack.push(divisor / dividend);
     }
 }
