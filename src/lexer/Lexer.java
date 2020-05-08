@@ -67,7 +67,7 @@ public class Lexer {
         else if (c == ')')
             return new Tuple(new ParenToken(")"), index+1, false);
         else if (c == '=')
-            return new Tuple(new AssignToken(" "), 1, false);
+            return new Tuple(new AssignToken("="), index+1, false);
         else if (c >= '0' && c <= '9')
         {
             var p = peekNumberToken(peekText);
@@ -76,7 +76,7 @@ public class Lexer {
         }
 
         var identEnd = getIdentifierEnd(peekText);
-        return new Tuple(new IdentToken(peekText.substring(0, identEnd)), identEnd, true);
+        return new Tuple(new IdentToken(peekText.substring(0, identEnd)), index+identEnd, true);
     }
 
     private int getFirstNonSpace() {

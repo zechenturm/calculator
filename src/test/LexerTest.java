@@ -103,7 +103,8 @@ public class LexerTest {
                 new TestSet("475 -789",new NumberToken("475"), new OperatorToken("-"),  new NumberToken("789"), new EOFToken()),
                 new TestSet("42/7",new NumberToken("42"), new OperatorToken("/"), new NumberToken("7"), new EOFToken()),
                 new TestSet("42 /  7",new NumberToken("42"), new OperatorToken("/"), new NumberToken("7"), new EOFToken()),
-                new TestSet("16 / 4 * 5",new NumberToken("16"), new OperatorToken("/"), new NumberToken("4"), new OperatorToken("*"), new NumberToken("5"), new EOFToken())
+                new TestSet("16 / 4 * 5",new NumberToken("16"), new OperatorToken("/"), new NumberToken("4"), new OperatorToken("*"), new NumberToken("5"), new EOFToken()),
+                new TestSet("x = 1 y = 2 x", new IdentToken("x"), new AssignToken("="), new NumberToken("1"), new IdentToken("y"), new AssignToken("="), new NumberToken("2"), new IdentToken("x"))
 
         };
 
@@ -145,7 +146,8 @@ public class LexerTest {
                 new TestSet("123 - -456", new NumberToken("123"), new OperatorToken("-"), new NumberToken("-456")),
                 new TestSet("123 * 456", new NumberToken("123"), new OperatorToken("*"), new NumberToken("456")),
                 new TestSet("123 / 456", new NumberToken("123"), new OperatorToken("/"), new NumberToken("456")),
-                new TestSet("1 * (2+3 )", new NumberToken("1"), new OperatorToken("*"), new ParenToken("("), new NumberToken("2"), new OperatorToken("+"), new NumberToken("3"), new ParenToken(")"))
+                new TestSet("1 * (2+3 )", new NumberToken("1"), new OperatorToken("*"), new ParenToken("("), new NumberToken("2"), new OperatorToken("+"), new NumberToken("3"), new ParenToken(")")),
+
         };
 
         for (var set: tests)
