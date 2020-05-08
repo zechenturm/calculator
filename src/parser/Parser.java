@@ -1,16 +1,15 @@
 package parser;
 
 import lexer.Lexer;
-import token.EOFToken;
-import token.NumberToken;
-import token.OperatorToken;
-import token.ParenToken;
+import token.*;
 
+import java.util.HashMap;
 import java.util.Stack;
 
 public class Parser
 {
     Stack<Integer> stack = new Stack<>();
+    HashMap<String, Integer> vars = new HashMap<>();
     private final Lexer lexer;
     public Parser(Lexer l)
     {
@@ -27,6 +26,19 @@ public class Parser
             if (currentToken instanceof NumberToken)
                 stack.push(Integer.parseInt(currentToken.content));
 
+            if (currentToken instanceof IdentToken)
+            {
+                var nextToken = lexer.peek();
+                if (nextToken instanceof AssignToken)
+                {
+                    lexer.next();
+                    var t = lexer.next();
+                    vars.put(currentToken.content, Integer.parseInt(t.content));
+                }
+                else
+                    stack.push(vars.get(currentToken.content));
+            }
+
             if (currentToken instanceof OperatorToken)
             {
                 var t = lexer.next();
@@ -38,7 +50,10 @@ public class Parser
                         stack.push(eval());
                 }
                 else
-                    stack.push(Integer.parseInt(t.content));
+                    if (t instanceof NumberToken)
+                        stack.push(Integer.parseInt(t.content));
+                    else
+                        stack.push(vars.get(t.content));
 
                 switch (currentToken.content) {
                     case "+":

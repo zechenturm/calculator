@@ -147,4 +147,20 @@ public class ParserTest
         p = new Parser(l);
         assertEquals(25, p.eval());
     }
+
+    @Test
+    public void testAssign()
+    {
+        var l = new Lexer("x = 1 y = 2 x");
+        var p = new Parser(l);
+        assertEquals(1, p.eval());
+
+        l = new Lexer("x = 1 y = 2 y");
+        p = new Parser(l);
+        assertEquals(2, p.eval());
+
+        l = new Lexer("x = 1 y = 2 y + x");
+        p = new Parser(l);
+        assertEquals(3, p.eval());
+    }
 }
