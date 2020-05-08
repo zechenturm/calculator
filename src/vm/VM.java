@@ -7,6 +7,6 @@ public interface VM {
     void div();
     void push(int value);
     int pop();
-    int load(String name);
-    void store(String name, int value);
+    int load(int index);
+    void store(int index, int value);
 }

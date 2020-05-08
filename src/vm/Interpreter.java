@@ -1,12 +1,12 @@
 package vm;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Stack;
 
 public class Interpreter implements VM
 {
         Stack<Integer> stack = new Stack<>();
-        HashMap<String, Integer> vars = new HashMap<>();
+        ArrayList<Integer> vars = new ArrayList<>();
 
     public void add()
     {
@@ -44,13 +44,20 @@ public class Interpreter implements VM
         return stack.pop();
     }
 
-    public int load(String name)
+    public int load(int index)
     {
-        return vars.get(name);
+        return vars.get(index);
     }
 
-    public void store(String name, int value)
+    public void store(int index, int value)
     {
-        vars.put(name, value);
+        try
+        {
+            vars.add(index, value);
+        }
+        catch (IndexOutOfBoundsException ioe)
+        {
+            vars.add(value);
+        }
     }
 }

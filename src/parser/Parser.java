@@ -5,10 +5,15 @@ import token.*;
 import vm.Interpreter;
 import vm.VM;
 
+import java.util.ArrayList;
+
 public class Parser
 {
     private final VM vm;
     private final Lexer lexer;
+
+    ArrayList<String> symbolTable = new ArrayList<>();
+
     public Parser(Lexer l, VM vm)
     {
         lexer = l;
@@ -37,10 +42,10 @@ public class Parser
                 {
                     lexer.next();
                     var t = lexer.next();
-                    vm.store(currentToken.content, Integer.parseInt(t.content));
+                    vm.store(lookup(currentToken.content), Integer.parseInt(t.content));
                 }
                 else
-                    vm.push(vm.load(currentToken.content));
+                    vm.push(vm.load(lookup(currentToken.content)));
             }
 
             if (currentToken instanceof OperatorToken)
@@ -57,7 +62,7 @@ public class Parser
                     if (t instanceof NumberToken)
                         vm.push(Integer.parseInt(t.content));
                     else
-                        vm.push(vm.load(t.content));
+                        vm.push(vm.load(lookup(t.content)));
 
                 switch (currentToken.content) {
                     case "+":
@@ -104,5 +109,16 @@ public class Parser
                 vm.div();
             tokenContent = lexer.peek().content;
         }
+    }
+
+    private int lookup(String name)
+    {
+        var index = symbolTable.indexOf(name);
+        if (index == -1)
+        {
+            symbolTable.add(name);
+            return symbolTable.size();
+        }
+        return index;
     }
 }
