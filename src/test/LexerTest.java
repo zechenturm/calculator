@@ -196,32 +196,24 @@ public class LexerTest {
     {
         var l = new Lexer("x =");
         var t = l.next();
-        assertEquals(AssignToken.class, t.getClass());
+        assertEquals(IdentToken.class, t.getClass());
         assertEquals("x", t.content);
-
-        l = new Lexer("abc =");
         t = l.next();
         assertEquals(AssignToken.class, t.getClass());
-        assertEquals("abc", t.content);
-
-        l = new Lexer("abc = 3");
-        t = l.next();
-        assertEquals(AssignToken.class, t.getClass());
-        assertEquals("abc", t.content);
-
-        t = l.next();
-        assertEquals(NumberToken.class, t.getClass());
-        assertEquals("3", t.content);
-
-        l = new Lexer("abc=3");
-        t = l.next();
-        assertEquals(AssignToken.class, t.getClass());
-        assertEquals("abc", t.content);
-
-        t = l.next();
-        assertEquals(NumberToken.class, t.getClass());
-        assertEquals("3", t.content);
     }
 
+    @Test
+    public void testIdentifier()
+    {
+        var l = new Lexer("x");
+        var t = l.next();
+        assertEquals(IdentToken.class, t.getClass());
+        assertEquals("x", t.content);
+
+        l = new Lexer("abc");
+        t = l.next();
+        assertEquals(IdentToken.class, t.getClass());
+        assertEquals("abc", t.content);
+    }
 
 }

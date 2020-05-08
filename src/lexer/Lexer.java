@@ -66,6 +66,8 @@ public class Lexer {
             return new Tuple(new ParenToken("("), index+1, false);
         else if (c == ')')
             return new Tuple(new ParenToken(")"), index+1, false);
+        else if (c == '=')
+            return new Tuple(new AssignToken(" "), 1, false);
         else if (c >= '0' && c <= '9')
         {
             var p = peekNumberToken(peekText);
@@ -73,8 +75,8 @@ public class Lexer {
             return new Tuple(p, true);
         }
 
-        var offset = getIdentifierEnd(peekText.substring(index)) + index;
-        return new Tuple(new AssignToken(peekText.substring(index, index+offset)), findEqual(peekText.substring(index)), true);
+        var identEnd = getIdentifierEnd(peekText);
+        return new Tuple(new IdentToken(peekText.substring(0, identEnd)), identEnd, true);
     }
 
     private int getFirstNonSpace() {
@@ -89,24 +91,16 @@ public class Lexer {
     {
         var index = 0;
         var c =content.charAt(index);
-        while ( c != ' ' && c != '=')
+        try
         {
-            ++index;
-            c = content.charAt(index);
+            while ( c >= 'a' && c <= 'z')
+            {
+                ++index;
+                c = content.charAt(index);
+            }
         }
+        catch (StringIndexOutOfBoundsException ignored) {}
         return index;
-    }
-
-    private int findEqual(String content)
-    {
-        var index = 0;
-        var c =content.charAt(index);
-        while (c != '=')
-        {
-            ++index;
-            c = content.charAt(index);
-        }
-        return index+1;
     }
 
     public Token next()
