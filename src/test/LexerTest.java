@@ -200,6 +200,16 @@ public class LexerTest {
         assertEquals("x", t.content);
         t = l.next();
         assertEquals(AssignToken.class, t.getClass());
+
+        l = new Lexer("abc= 123");
+        t = l.next();
+        assertEquals(IdentToken.class, t.getClass());
+        assertEquals("abc", t.content);
+        t = l.next();
+        assertEquals(AssignToken.class, t.getClass());
+        t = l.next();
+        assertEquals(NumberToken.class, t.getClass());
+        assertEquals("123", t.content);
     }
 
     @Test
