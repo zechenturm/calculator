@@ -7,7 +7,7 @@ import vm.VM;
 
 public class Parser
 {
-    private VM vm;
+    private final VM vm;
     private final Lexer lexer;
     public Parser(Lexer l, VM vm)
     {
