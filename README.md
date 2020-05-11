@@ -11,7 +11,7 @@ Planned features:
 - [x] operator precedence
 - [x] parentheses
 - [ ] multiline programs
-- [ ] variable declarations
+- [x] variable declarations
 - [ ] if-else expression
 - [ ] builtin functions
 - [ ] byte code compiler
