@@ -8,7 +8,7 @@ public class Interpreter implements VM
         Stack<Integer> stack = new Stack<>();
         ArrayList<Integer> vars = new ArrayList<>();
 
-        private boolean ignore = false;
+        protected boolean ignore = false;
 
     public void add()
     {
