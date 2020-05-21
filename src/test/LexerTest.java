@@ -253,12 +253,13 @@ public class LexerTest {
         assertEquals(ConditionalToken.class, t.getClass());
         assertEquals("if", t.content);
 
-        l = new Lexer("if 0 then 10");
+        l = new Lexer("if 0 then 10 end");
 
         Token[] expectedTokens = {new ConditionalToken("if"),
                 new NumberToken("0"),
                 new ConditionalToken("then"),
                 new NumberToken("10"),
+                new ConditionalToken("end"),
                 new EOFToken()};
 
         for (var token : expectedTokens)

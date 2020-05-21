@@ -82,6 +82,10 @@ public class Lexer {
         {
             return new Tuple(new Pair(new ConditionalToken("then"), 5), false);
         }
+        else if (peekText.startsWith("end"))
+        {
+            return new Tuple(new Pair(new ConditionalToken("end"), 4), false);
+        }
 
         var identEnd = getIdentifierEnd(peekText);
         return new Tuple(new IdentToken(peekText.substring(0, identEnd)), index+identEnd, true);
