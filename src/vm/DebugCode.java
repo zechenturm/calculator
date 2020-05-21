@@ -73,7 +73,7 @@ public class DebugCode extends Interpreter {
 
     private void printIgnored()
     {
-        if (ignore)
+        if (ignore != -1)
             System.out.print("!");
     }
 

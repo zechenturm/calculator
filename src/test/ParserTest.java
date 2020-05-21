@@ -196,4 +196,12 @@ public class ParserTest
         p = new Parser(l);
         assertEquals(10, p.eval());
     }
+
+    @Test
+    public void testNestedIfs()
+    {
+        var l = new Lexer("x = 1 y = 0 z = 2 if x then if y then z = 10 end end z");
+        var p = new Parser(l, new DebugCode());
+        assertEquals(2, p.eval());
+    }
 }

@@ -14,6 +14,8 @@ public class Parser
 
     ArrayList<String> symbolTable = new ArrayList<>();
 
+    private int labelIndex = 0;
+
     public Parser(Lexer l, VM vm)
     {
         lexer = l;
@@ -64,10 +66,11 @@ public class Parser
                 if (currentToken.content.equals("end"))
                     break;
                 if (currentToken.content.equals("if")) {
+                    var currentIndex = labelIndex++;
                     evaluate();
-                    vm.branchIfZero(0);
+                    vm.branchIfZero(currentIndex);
                     evaluate();
-                    vm.label(0);
+                    vm.label(currentIndex);
                 }
             }
 
@@ -136,6 +139,7 @@ public class Parser
 
     private int lookup(String name)
     {
+        System.out.println("looking up: " + name);
         var index = symbolTable.indexOf(name);
         if (index == -1)
         {
