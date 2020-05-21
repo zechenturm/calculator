@@ -44,9 +44,9 @@ public class Interpreter implements VM
         return stack.pop();
     }
 
-    public int load(int index)
+    public void load(int index)
     {
-        return vars.get(index);
+        push(vars.get(index));
     }
 
     public void store(int index, int value)

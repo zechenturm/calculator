@@ -45,7 +45,7 @@ public class Parser
                     vm.store(lookup(currentToken.content), Integer.parseInt(t.content));
                 }
                 else
-                    vm.push(vm.load(lookup(currentToken.content)));
+                    vm.load(lookup(currentToken.content));
             }
 
             if (currentToken instanceof OperatorToken)
@@ -62,7 +62,7 @@ public class Parser
                     if (t instanceof NumberToken)
                         vm.push(Integer.parseInt(t.content));
                     else
-                        vm.push(vm.load(lookup(t.content)));
+                        vm.load(lookup(t.content));
 
                 switch (currentToken.content) {
                     case "+":
