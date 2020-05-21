@@ -315,4 +315,39 @@ public class LexerTest {
         }
     }
 
+    @Test
+    public void testEndStmt()
+    {
+        var l = new Lexer(";");
+        Token[] expectedTokens = {
+                new EndStmtToken(),
+                new EOFToken()
+        };
+
+        for (var token : expectedTokens)
+        {
+            var t = l.next();
+            assertEquals(token.content, t.content);
+            assertEquals(token.getClass(), t.getClass());
+        }
+
+        l = new Lexer("x = 1 + 1;");
+        expectedTokens = new Token[] {
+                new IdentToken("x"),
+                new AssignToken("="),
+                new NumberToken("1"),
+                new OperatorToken("+"),
+                new NumberToken("1"),
+                new EndStmtToken(),
+                new EOFToken()
+        };
+
+        for (var token : expectedTokens)
+        {
+            var t = l.next();
+            assertEquals(token.content, t.content);
+            assertEquals(token.getClass(), t.getClass());
+        }
+    }
+
 }

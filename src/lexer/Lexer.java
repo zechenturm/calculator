@@ -62,6 +62,8 @@ public class Lexer {
             p.index += index;
             return p;
         }
+        else if (c == ';')
+            return new Tuple(new EndStmtToken(), index+1, false);
         else if (c == '(')
             return new Tuple(new ParenToken("("), index+1, false);
         else if (c == ')')
