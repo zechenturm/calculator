@@ -57,9 +57,10 @@ public class Interpreter implements VM
         push(vars.get(index));
     }
 
-    public void store(int index, int value)
+    public void store(int index)
     {
         if (ignore) return;
+        var value = stack.pop();
         try
         {
             vars.add(index, value);

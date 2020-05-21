@@ -42,7 +42,16 @@ public class Parser
                 {
                     lexer.next();
                     var t = lexer.next();
-                    vm.store(lookup(currentToken.content), Integer.parseInt(t.content));
+                    if (t instanceof NumberToken)
+                    {
+                        vm.push(Integer.parseInt(t.content));
+                        vm.store(lookup(currentToken.content));
+                    }
+                    else
+                    {
+                        vm.load(lookup(t.content));
+                        vm.store(lookup(currentToken.content));
+                    }
                 }
                 else
                     vm.load(lookup(currentToken.content));

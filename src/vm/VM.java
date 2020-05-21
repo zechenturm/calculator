@@ -8,7 +8,7 @@ public interface VM {
     void push(int value);
     int pop();
     void load(int index);
-    void store(int index, int value);
+    void store(int index);
     void branchIfZero(int label);
     void label(int index);
 }

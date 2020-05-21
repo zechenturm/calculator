@@ -163,6 +163,10 @@ public class ParserTest
         l = new Lexer("x = 1 y = 2 y + x");
         p = new Parser(l);
         assertEquals(3, p.eval());
+
+        l = new Lexer("x = 1 y = x y");
+        p = new Parser(l);
+        assertEquals(1, p.eval());
     }
 
     @Test
