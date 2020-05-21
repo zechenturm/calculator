@@ -189,7 +189,7 @@ public class ParserTest
         assertEquals(15, p.eval());
 
         l = new Lexer("x = 0 if 0 then x = 10 end x");
-        p = new Parser(l, new DebugCode());
+        p = new Parser(l);
         assertEquals(0, p.eval());
 
         l = new Lexer("x = 0 if 1 then x = 10 end x");
