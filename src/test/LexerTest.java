@@ -244,4 +244,29 @@ public class LexerTest {
         }
     }
 
+    @Test
+    public void testIf()
+    {
+        var l = new Lexer("if");
+        var t = l.next();
+
+        assertEquals(ConditionalToken.class, t.getClass());
+        assertEquals("if", t.content);
+
+        l = new Lexer("if 0 then 10");
+
+        Token[] expectedTokens = {new ConditionalToken("if"),
+                new NumberToken("0"),
+                new ConditionalToken("then"),
+                new NumberToken("10"),
+                new EOFToken()};
+
+        for (var token : expectedTokens)
+        {
+            t = l.next();
+            assertEquals(token.content, t.content);
+            assertEquals(token.getClass(), t.getClass());
+        }
+    }
+
 }

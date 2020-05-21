@@ -74,6 +74,14 @@ public class Lexer {
             p.index += index;
             return new Tuple(p, true);
         }
+        else if (c == 'i' && peekText.charAt(1) == 'f')
+        {
+            return new Tuple(new Pair(new ConditionalToken("if"), 2), false);
+        }
+        else if (peekText.startsWith("then"))
+        {
+            return new Tuple(new Pair(new ConditionalToken("then"), 5), false);
+        }
 
         var identEnd = getIdentifierEnd(peekText);
         return new Tuple(new IdentToken(peekText.substring(0, identEnd)), index+identEnd, true);
