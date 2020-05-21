@@ -268,6 +268,29 @@ public class LexerTest {
             assertEquals(token.content, t.content);
             assertEquals(token.getClass(), t.getClass());
         }
+
+        l = new Lexer("x = 0 if 1 then x = 10 end x");
+
+        expectedTokens = new Token[]{
+                new IdentToken("x"),
+                new AssignToken("="),
+                new NumberToken("0"),
+                new ConditionalToken("if"),
+                new NumberToken("1"),
+                new ConditionalToken("then"),
+                new IdentToken("x"),
+                new AssignToken("="),
+                new NumberToken("10"),
+                new ConditionalToken("end"),
+                new IdentToken("x"),
+                new EOFToken()};
+
+        for (var token : expectedTokens)
+        {
+            t = l.next();
+            assertEquals(token.content, t.content);
+            assertEquals(token.getClass(), t.getClass());
+        }
     }
 
 }
