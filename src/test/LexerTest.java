@@ -228,4 +228,20 @@ public class LexerTest {
         assertEquals("abc", t.content);
     }
 
+    @Test
+    public void testMultiline()
+    {
+        var l = new Lexer("1 +\n2");
+        Token[] expectedTokens = {new NumberToken("1"),
+                new OperatorToken("+"),
+                new NumberToken("2"), new EOFToken()};
+
+        for (var token : expectedTokens)
+        {
+            var t = l.next();
+            assertEquals(token.getClass(), t.getClass());
+            assertEquals(token.content, t.content);
+        }
+    }
+
 }

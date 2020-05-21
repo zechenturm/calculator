@@ -10,7 +10,7 @@ Planned features:
 - [x] basic operations
 - [x] operator precedence
 - [x] parentheses
-- [ ] multiline programs
+- [x] multiline programs
 - [x] variable declarations
 - [ ] if-else expression
 - [ ] builtin functions

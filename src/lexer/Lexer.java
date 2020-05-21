@@ -81,7 +81,7 @@ public class Lexer {
 
     private int getFirstNonSpace() {
         int index = 0;
-        while (content.charAt(index) == ' ')
+        while (content.charAt(index) == ' ' || content.charAt(index) == '\n' )
             ++index;
 
         return index;
