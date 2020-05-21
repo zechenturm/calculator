@@ -117,7 +117,7 @@ public class Parser
         if (index == -1)
         {
             symbolTable.add(name);
-            return symbolTable.size();
+            return symbolTable.size()-1;
         }
         return index;
     }
