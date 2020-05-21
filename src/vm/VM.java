@@ -9,4 +9,6 @@ public interface VM {
     int pop();
     void load(int index);
     void store(int index, int value);
+    void branchIfZero(int label);
+    void label(int index);
 }

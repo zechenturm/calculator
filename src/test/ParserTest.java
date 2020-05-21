@@ -3,6 +3,7 @@ package test;
 import lexer.Lexer;
 import org.junit.jupiter.api.Test;
 import parser.Parser;
+import vm.DebugCode;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -162,5 +163,33 @@ public class ParserTest
         l = new Lexer("x = 1 y = 2 y + x");
         p = new Parser(l);
         assertEquals(3, p.eval());
+    }
+
+    @Test
+    public void testIf()
+    {
+        var l = new Lexer("if 0 then 10");
+        var p = new Parser(l);
+        assertEquals(0, p.eval());
+
+        l = new Lexer("if 1 then 10");
+        p = new Parser(l);
+        assertEquals(10, p.eval());
+
+        l = new Lexer("if 0+1 then 10");
+        p = new Parser(l);
+        assertEquals(10, p.eval());
+
+        l = new Lexer("if 1 then 10 end 15");
+        p = new Parser(l);
+        assertEquals(15, p.eval());
+
+        l = new Lexer("x = 0 if 0 then x = 10 end x");
+        p = new Parser(l, new DebugCode());
+        assertEquals(0, p.eval());
+
+        l = new Lexer("x = 0 if 1 then x = 10 end x");
+        p = new Parser(l, new DebugCode());
+        assertEquals(10, p.eval());
     }
 }

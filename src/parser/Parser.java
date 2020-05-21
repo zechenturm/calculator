@@ -48,6 +48,20 @@ public class Parser
                     vm.load(lookup(currentToken.content));
             }
 
+            if (currentToken instanceof ConditionalToken)
+            {
+                if (currentToken.content.equals("then"))
+                    break;
+                if (currentToken.content.equals("end"))
+                    break;
+                if (currentToken.content.equals("if")) {
+                    evaluate();
+                    vm.branchIfZero(0);
+                    evaluate();
+                    vm.label(0);
+                }
+            }
+
             if (currentToken instanceof OperatorToken)
             {
                 var t = lexer.next();
