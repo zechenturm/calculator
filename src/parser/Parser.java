@@ -36,24 +36,29 @@ public class Parser
                 break;
             if (currentToken instanceof NumberToken)
                 vm.push(Integer.parseInt(currentToken.content));
+            if (currentToken instanceof EndStmtToken)
+                break;
 
             if (currentToken instanceof IdentToken)
             {
                 var nextToken = lexer.peek();
                 if (nextToken instanceof AssignToken)
                 {
-                    lexer.next();
-                    var t = lexer.next();
-                    if (t instanceof NumberToken)
-                    {
-                        vm.push(Integer.parseInt(t.content));
-                        vm.store(lookup(currentToken.content));
-                    }
-                    else
-                    {
-                        vm.load(lookup(t.content));
-                        vm.store(lookup(currentToken.content));
-                    }
+                    var varIndex = lookup(currentToken.content);
+                    evaluate();
+                    vm.store(varIndex);
+//                    lexer.next();
+//                    var t = lexer.next();
+//                    if (t instanceof NumberToken)
+//                    {
+//                        vm.push(Integer.parseInt(t.content));
+//                        vm.store(lookup(currentToken.content));
+//                    }
+//                    else
+//                    {
+//                        vm.load(lookup(t.content));
+//                        vm.store(lookup(currentToken.content));
+//                    }
                 }
                 else
                     vm.load(lookup(currentToken.content));
@@ -139,7 +144,6 @@ public class Parser
 
     private int lookup(String name)
     {
-        System.out.println("looking up: " + name);
         var index = symbolTable.indexOf(name);
         if (index == -1)
         {
