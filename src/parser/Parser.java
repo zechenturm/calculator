@@ -47,18 +47,6 @@ public class Parser
                     var varIndex = lookup(currentToken.content);
                     evaluate();
                     vm.store(varIndex);
-//                    lexer.next();
-//                    var t = lexer.next();
-//                    if (t instanceof NumberToken)
-//                    {
-//                        vm.push(Integer.parseInt(t.content));
-//                        vm.store(lookup(currentToken.content));
-//                    }
-//                    else
-//                    {
-//                        vm.load(lookup(t.content));
-//                        vm.store(lookup(currentToken.content));
-//                    }
                 }
                 else
                     vm.load(lookup(currentToken.content));
