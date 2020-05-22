@@ -44,7 +44,7 @@ public class Parser
 
             if (currentToken instanceof ConditionalToken)
             {
-                if (handleConditional(currentToken)) break;
+                handleConditional(currentToken);
             }
 
             if (currentToken instanceof OperatorToken)
@@ -92,11 +92,7 @@ public class Parser
         return false;
     }
 
-    private boolean handleConditional(Token currentToken) {
-        if (currentToken.content.equals("then"))
-            return true;
-        if (currentToken.content.equals("end"))
-            return true;
+    private void handleConditional(Token currentToken) {
         if (currentToken.content.equals("if")) {
             var currentIndex = labelIndex++;
             evaluate();
@@ -104,7 +100,6 @@ public class Parser
             evaluate();
             vm.label(currentIndex);
         }
-        return false;
     }
 
     private void handleIdentifier(Token currentToken) {

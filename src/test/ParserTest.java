@@ -176,27 +176,27 @@ public class ParserTest
     @Test
     public void testIf()
     {
-        var l = new Lexer("if 0 then 10");
+        var l = new Lexer("if 0 ; 10");
         var p = new Parser(l);
         assertEquals(0, p.eval());
 
-        l = new Lexer("if 1 then 10");
+        l = new Lexer("if 1 ; 10");
         p = new Parser(l);
         assertEquals(10, p.eval());
 
-        l = new Lexer("if 0+1 then 10");
+        l = new Lexer("if 0+1 ; 10");
         p = new Parser(l);
         assertEquals(10, p.eval());
 
-        l = new Lexer("if 1 then 10 end 15");
+        l = new Lexer("if 1 ; 10 end 15");
         p = new Parser(l);
         assertEquals(15, p.eval());
 
-        l = new Lexer("x = 0; if 0 then x = 10; end x");
+        l = new Lexer("x = 0; if 0 ; x = 10; ; x");
         p = new Parser(l);
         assertEquals(0, p.eval());
 
-        l = new Lexer("x = 0; if 1 then x = 10; end x");
+        l = new Lexer("x = 0; if 1 ; x = 10; ; x");
         p = new Parser(l);
         assertEquals(10, p.eval());
     }
@@ -204,19 +204,19 @@ public class ParserTest
     @Test
     public void testNestedIfs()
     {
-        var l = new Lexer("x = 0; y = 0; z = 2; if x then if y then z = 10; end z = z + 10; end z");
+        var l = new Lexer("x = 0; y = 0; z = 2; if x ; if y ; z = 10;; z = z + 10; ; z");
         var p = new Parser(l);
         assertEquals(2, p.eval());
 
-        l = new Lexer("x = 0; y = 1; z = 2; if x then if y then z = 10; end z = z + 10; end z");
+        l = new Lexer("x = 0; y = 1; z = 2; if x ; if y ; z = 10; ; z = z + 10; ; z");
         p = new Parser(l);
         assertEquals(2, p.eval());
 
-        l = new Lexer("x = 1; y = 0; z = 2; if x then if y then z = 10; end z = z + 10; end z");
+        l = new Lexer("x = 1; y = 0; z = 2; if x ; if y ; z = 10; ; z = z + 10; ; z");
         p = new Parser(l);
         assertEquals(12, p.eval());
 
-        l = new Lexer("x = 1; y = 1; z = 2; if x then if y then z = 10; end z = z + 10; end z");
+        l = new Lexer("x = 1; y = 1; z = 2; if x ; if y ; z = 10; ; z = z + 10; ; z");
         p = new Parser(l);
         assertEquals(20, p.eval());
     }
