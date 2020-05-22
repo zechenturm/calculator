@@ -58,10 +58,16 @@ public class Lexer {
         var peekText = content.substring(textOffset);
 
         var c = peekText.charAt(0);
-        if (reservedChars.handle(peekText) != null)
+        if (isOperator(c))
         {
-            return handleSingleCharToken(textOffset, peekText, c);
+            var p = handleOperator(peekText, c);
+            p.index += textOffset;
+            return p;
         }
+
+        var t = reservedChars.handle(peekText);
+        if (t != null)
+            return new Tuple(t, textOffset+1, false);
 
         if (c >= '0' && c <= '9')
         {
@@ -76,24 +82,6 @@ public class Lexer {
 
         var identEnd = getIdentifierEnd(peekText);
         return new Tuple(new IdentToken(peekText.substring(0, identEnd)), textOffset+identEnd, true);
-    }
-
-    private Tuple handleSingleCharToken(int textOffset, String peekText, char c) {
-        if (isOperator(c))
-        {
-            var p = handleOperator(peekText, c);
-            p.index += textOffset;
-            return p;
-        }
-        if (c == ';')
-            return new Tuple(new EndStmtToken(), textOffset+1, false);
-        else if (c == '(')
-            return new Tuple(new ParenToken("("), textOffset+1, false);
-        else if (c == ')')
-            return new Tuple(new ParenToken(")"), textOffset+1, false);
-        else if (c == '=')
-            return new Tuple(new AssignToken("="), textOffset+1, false);
-        return null;
     }
 
     private Tuple handleReserved(int kwIndex, int textOffset) {
