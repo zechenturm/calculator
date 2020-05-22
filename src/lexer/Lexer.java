@@ -138,8 +138,9 @@ public class Lexer {
         Tuple p;
         if (c == '-')
         {
-            var t = handleUnaryMinus(content);
-            p = Objects.requireNonNullElseGet(t, () -> new Tuple(new OperatorToken("-"), 1, false));
+            var t = handleUnaryMinus(content, lastTokenNumber);
+            t = Objects.requireNonNullElseGet(t, () -> new OperatorToken("-"));
+            p = new Tuple(t, t.content.length(), false);
         }
         else
             p = new Tuple(new OperatorToken(Character.toString(c)), 1, false);
@@ -147,7 +148,7 @@ public class Lexer {
         return p;
     }
 
-    private Tuple handleUnaryMinus(String content) {
+    private static Token handleUnaryMinus(String content, boolean lastTokenNumber) {
         if (content.length() <= 1)
             return null;
 
@@ -160,7 +161,7 @@ public class Lexer {
         var t = (NumberToken) p.token;
 
         t.content = "-" + t.content;
-        return new Tuple(t, p.index+1, false);
+        return t;
     }
 
     private NumberToken getNumberToken() {
@@ -169,7 +170,7 @@ public class Lexer {
         return (NumberToken) p.token;
     }
 
-    private Tuple peekNumberToken(String content)
+    private static Tuple peekNumberToken(String content)
     {
         int index = 0;
         while(index < content.length())
