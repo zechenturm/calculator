@@ -109,7 +109,7 @@ public class Lexer {
         var t = (NumberToken) p.token;
 
         t.content = "-" + t.content;
-        return new Tuple(t, p.index+1, false);
+        return new Tuple(t, p.index+1, true);
     }
 
     private static Tuple peekNumberToken(String content)

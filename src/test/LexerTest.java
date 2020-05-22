@@ -104,7 +104,8 @@ public class LexerTest {
                 new TestSet("42/7",new NumberToken("42"), new OperatorToken("/"), new NumberToken("7"), new EOFToken()),
                 new TestSet("42 /  7",new NumberToken("42"), new OperatorToken("/"), new NumberToken("7"), new EOFToken()),
                 new TestSet("16 / 4 * 5",new NumberToken("16"), new OperatorToken("/"), new NumberToken("4"), new OperatorToken("*"), new NumberToken("5"), new EOFToken()),
-                new TestSet("x = 1 y = 2 x", new IdentToken("x"), new AssignToken("="), new NumberToken("1"), new IdentToken("y"), new AssignToken("="), new NumberToken("2"), new IdentToken("x"))
+                new TestSet("x = 1 y = 2 x", new IdentToken("x"), new AssignToken("="), new NumberToken("1"), new IdentToken("y"), new AssignToken("="), new NumberToken("2"), new IdentToken("x")),
+                new TestSet("1 + -1-1", new NumberToken("1"), new OperatorToken("+"), new NumberToken("-1"), new OperatorToken("-"), new NumberToken("1"), new EOFToken())
 
         };
 
