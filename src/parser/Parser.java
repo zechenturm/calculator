@@ -118,19 +118,10 @@ public class Parser
         var tokenContent = lexer.peek().content;
         while (tokenContent.equals("/") || tokenContent.equals("*"))
         {
-            //skip peeked token since we already looked at that
-            lexer.next();
-
             var t = lexer.next();
-            if (t.content.equals("("))
-                evaluate();
-            else
-                handleNumber(t);
-
-            if (tokenContent.equals("*"))
-                vm.mul();
-            else
-                vm.div();
+            handleToken(t);
+            t = lexer.next();
+            handleToken(t);
             tokenContent = lexer.peek().content;
         }
     }

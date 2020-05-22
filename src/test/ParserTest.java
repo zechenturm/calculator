@@ -171,6 +171,10 @@ public class ParserTest
         l = new Lexer("x = 0; x = 1 + 1; x");
         p = new Parser(l);
         assertEquals(2, p.eval());
+
+        l = new Lexer("x = 4; 1+4*x");
+        p = new Parser(l);
+        assertEquals(17, p.eval());
     }
 
     @Test
