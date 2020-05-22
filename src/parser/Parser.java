@@ -34,21 +34,25 @@ public class Parser
             var currentToken = lexer.next();
             if (shouldBreak(currentToken))
                 break;
-            if (currentToken instanceof NumberToken)
-                handleNumber(currentToken);
-
-            if (currentToken instanceof IdentToken)
-                handleIdentifier(currentToken);
-
-            if (currentToken instanceof ConditionalToken)
-                handleConditional(currentToken);
-
-            if (currentToken instanceof ParenToken)
-                evaluate();
-
-            if (currentToken instanceof OperatorToken)
-                handleOperator(currentToken);
+            handleToken(currentToken);
         }
+    }
+
+    private void handleToken(Token currentToken) {
+        if (currentToken instanceof NumberToken)
+            handleNumber(currentToken);
+
+        if (currentToken instanceof IdentToken)
+            handleIdentifier(currentToken);
+
+        if (currentToken instanceof ConditionalToken)
+            handleConditional(currentToken);
+
+        if (currentToken instanceof ParenToken)
+            evaluate();
+
+        if (currentToken instanceof OperatorToken)
+            handleOperator(currentToken);
     }
 
     private void handleNumber(Token currentToken) {
