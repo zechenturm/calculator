@@ -83,42 +83,24 @@ public class Lexer {
             return new Tuple(p, true);
         }
 
-        if (isReserved(peekText))
-        {
-            Tuple x = handleReserved(peekText, index);
-            if (x != null) return x;
-        }
-
+        var i = isReserved(peekText);
+        if (i != -1)
+            return handleReserved(i, index);
 
         var identEnd = getIdentifierEnd(peekText);
         return new Tuple(new IdentToken(peekText.substring(0, identEnd)), index+identEnd, true);
     }
 
-    private Tuple handleReserved(String peekText, int index) {
-        if (peekText.startsWith("if"))
-        {
-            return new Tuple(new Pair(new ConditionalToken("if"), index+2), false);
-        }
-        else if (peekText.startsWith("then"))
-        {
-            return new Tuple(new Pair(new ConditionalToken("then"), index+4), false);
-        }
-        else if (peekText.startsWith("else"))
-        {
-            return new Tuple(new Pair(new ConditionalToken("else"), index+4), false);
-        }
-        else if (peekText.startsWith("end"))
-        {
-            return new Tuple(new Pair(new ConditionalToken("end"), index+3), false);
-        }
-        return null;
+    private Tuple handleReserved(int kwIndex, int textOffset) {
+        var word = reservedWords[kwIndex];
+        return new Tuple(new Pair(new ConditionalToken(word), textOffset+word.length()), false);
     }
 
-    private boolean isReserved(String peekText) {
-        for (var word : reservedWords)
-            if (peekText.startsWith(word))
-                return true;
-        return false;
+    private int isReserved(String peekText) {
+        for (int i = 0; i < reservedWords.length; i++)
+            if (peekText.startsWith(reservedWords[i]))
+                return i;
+        return -1;
     }
 
     private int getFirstNonSpace() {
