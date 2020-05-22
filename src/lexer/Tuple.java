@@ -14,4 +14,10 @@ class Tuple
         index = i;
         this.lastTokenNumber = lastTokenNumber;
     }
+
+    public Tuple plusOffset(int offset)
+    {
+        index += offset;
+        return this;
+    }
 }

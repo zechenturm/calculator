@@ -59,21 +59,13 @@ public class Lexer {
         int textOffset = getFirstNonSpace();
         var peekText = content.substring(textOffset);
 
-        var c = peekText.charAt(0);
-
         var t = reserved.handle(peekText, lastTokenNumber);
         if (t != null)
-        {
-            t.index += textOffset;
-            return t;
-        }
+            return t.plusOffset(textOffset);
 
+        var c = peekText.charAt(0);
         if (c >= '0' && c <= '9')
-        {
-            var p = peekNumberToken(peekText);
-            p.index += textOffset;
-            return p;
-        }
+            return peekNumberToken(peekText).plusOffset(textOffset);
 
         var identEnd = getIdentifierEnd(peekText);
         return new Tuple(new IdentToken(peekText.substring(0, identEnd)), textOffset+identEnd, true);
@@ -126,12 +118,6 @@ public class Lexer {
 
         t.content = "-" + t.content;
         return new Tuple(t, p.index+1, false);
-    }
-
-    private NumberToken getNumberToken() {
-        var p = peekNumberToken(content);
-        content = content.substring(p.index);
-        return (NumberToken) p.token;
     }
 
     private static Tuple peekNumberToken(String content)
