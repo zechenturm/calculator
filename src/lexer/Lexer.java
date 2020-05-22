@@ -2,8 +2,6 @@ package lexer;
 
 import token.*;
 
-import java.util.Objects;
-
 public class Lexer {
     String content;
     boolean lastTokenNumber = false;
@@ -16,7 +14,7 @@ public class Lexer {
 
     private static final TokenFactory reserved = new TokenFactory(
             new TokenFactory.Pair("+", (t, l) -> nonNumberTokenToTuple(new OperatorToken("+"))),
-            new TokenFactory.Pair("-", Lexer::handleMinusToken),
+            new TokenFactory.Pair("-", Lexer::handleMinus),
             new TokenFactory.Pair("*", (t, l) -> nonNumberTokenToTuple(new OperatorToken("*"))),
             new TokenFactory.Pair("/", (t, l) -> nonNumberTokenToTuple(new OperatorToken("/"))),
             new TokenFactory.Pair(";", (t, l) -> new Tuple(new EndStmtToken(), 1, false)),
@@ -33,12 +31,6 @@ public class Lexer {
     private static Tuple nonNumberTokenToTuple(Token t)
     {
         return new Tuple(t, t.content.length(), false);
-    }
-
-    private static Tuple handleMinusToken(String text, boolean lastTokenNumber)
-    {
-        var t = handleUnaryMinus(text, lastTokenNumber);
-        return Objects.requireNonNullElseGet(t, () -> new Tuple(new OperatorToken("-"), 1, false));
     }
 
     public Lexer(String input)
@@ -103,14 +95,14 @@ public class Lexer {
         return p.token;
     }
 
-    private static Tuple handleUnaryMinus(String content, boolean lastTokenNumber)
+    private static Tuple handleMinus(String content, boolean lastTokenNumber)
     {
         if (content.length() <= 1)
-            return null;
+            return new Tuple(new OperatorToken("-"), 1, false);
 
         var c = content.charAt(1);
         if (!(c >= '0' && c <= '9' && !lastTokenNumber))
-            return null;
+            return new Tuple(new OperatorToken("-"), 1, false);
 
         content = content.substring(1);
         var p = peekNumberToken(content);
