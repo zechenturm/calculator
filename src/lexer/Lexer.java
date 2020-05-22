@@ -14,18 +14,23 @@ public class Lexer {
       "end"
     };
 
-    private static final TokenFactory reservedChars = new TokenFactory(
-            new TokenFactory.Pair("+", (t, l) -> singleCharTokenToTuple(new OperatorToken("+"))),
+    private static final TokenFactory reserved = new TokenFactory(
+            new TokenFactory.Pair("+", (t, l) -> nonNumberTokenToTuple(new OperatorToken("+"))),
             new TokenFactory.Pair("-", Lexer::handleMinusToken),
-            new TokenFactory.Pair("*", (t, l) -> singleCharTokenToTuple(new OperatorToken("*"))),
-            new TokenFactory.Pair("/", (t, l) -> singleCharTokenToTuple(new OperatorToken("/"))),
+            new TokenFactory.Pair("*", (t, l) -> nonNumberTokenToTuple(new OperatorToken("*"))),
+            new TokenFactory.Pair("/", (t, l) -> nonNumberTokenToTuple(new OperatorToken("/"))),
             new TokenFactory.Pair(";", (t, l) -> new Tuple(new EndStmtToken(), 1, false)),
-            new TokenFactory.Pair("(", (t, l) -> singleCharTokenToTuple(new ParenToken("("))),
-            new TokenFactory.Pair(")", (t, l) -> singleCharTokenToTuple(new ParenToken(")"))),
-            new TokenFactory.Pair("=", (t, l) -> singleCharTokenToTuple(new AssignToken("=")))
+            new TokenFactory.Pair("(", (t, l) -> nonNumberTokenToTuple(new ParenToken("("))),
+            new TokenFactory.Pair(")", (t, l) -> nonNumberTokenToTuple(new ParenToken(")"))),
+            new TokenFactory.Pair("=", (t, l) -> nonNumberTokenToTuple(new AssignToken("="))),
+            new TokenFactory.Pair("if", (t, l) -> nonNumberTokenToTuple(new ConditionalToken("if"))),
+            new TokenFactory.Pair("then", (t, l) -> nonNumberTokenToTuple(new ConditionalToken("then"))),
+            new TokenFactory.Pair("else", (t, l) -> nonNumberTokenToTuple(new ConditionalToken("else"))),
+            new TokenFactory.Pair("end", (t, l) -> nonNumberTokenToTuple(new ConditionalToken("end")))
+
     );
 
-    private static Tuple singleCharTokenToTuple(Token t)
+    private static Tuple nonNumberTokenToTuple(Token t)
     {
         return new Tuple(t, t.content.length(), false);
     }
@@ -56,7 +61,7 @@ public class Lexer {
 
         var c = peekText.charAt(0);
 
-        var t = reservedChars.handle(peekText, lastTokenNumber);
+        var t = reserved.handle(peekText, lastTokenNumber);
         if (t != null)
         {
             t.index += textOffset;
@@ -70,24 +75,8 @@ public class Lexer {
             return p;
         }
 
-        var i = isReserved(peekText);
-        if (i != -1)
-            return handleReserved(i, textOffset);
-
         var identEnd = getIdentifierEnd(peekText);
         return new Tuple(new IdentToken(peekText.substring(0, identEnd)), textOffset+identEnd, true);
-    }
-
-    private Tuple handleReserved(int kwIndex, int textOffset) {
-        var word = reservedWords[kwIndex];
-        return new Tuple(new ConditionalToken(word), textOffset+word.length(), false);
-    }
-
-     private int isReserved(String peekText) {
-        for (int i = 0; i < reservedWords.length; i++)
-            if (peekText.startsWith(reservedWords[i]))
-                return i;
-        return -1;
     }
 
     private int getFirstNonSpace() {
