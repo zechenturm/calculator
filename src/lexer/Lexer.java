@@ -22,31 +22,17 @@ public class Lexer {
     }
 
 
-    private static class Pair
+     private static class Tuple
     {
         public Token token;
         public int index;
-
-        public Pair(Token t, int i)
-        {
-            token = t;
-            index = i;
-        }
-    }
-
-    private static class Tuple extends Pair
-    {
         public boolean lastTokenNumber;
 
         public Tuple(Token t, int i, boolean lastTokenNumber)
         {
-            super(t, i);
+            token = t;
+            index = i;
             this.lastTokenNumber = lastTokenNumber;
-        }
-
-        public Tuple(Pair p, boolean lastTokenNumber)
-        {
-            this(p.token, p.index, lastTokenNumber);
         }
     }
 
@@ -74,7 +60,7 @@ public class Lexer {
         {
             var p = peekNumberToken(peekText);
             p.index += textOffset;
-            return new Tuple(p, true);
+            return p;
         }
 
         i = isReserved(peekText);
@@ -162,19 +148,19 @@ public class Lexer {
 
     private Tuple handleOperator(String content, char c)
     {
-        Pair p;
+        Tuple p;
         if (c == '-')
         {
             var t = handleUnaryMinus(content);
-            p = Objects.requireNonNullElseGet(t, () -> new Pair(new OperatorToken("-"), 1));
+            p = Objects.requireNonNullElseGet(t, () -> new Tuple(new OperatorToken("-"), 1, false));
         }
         else
-            p = new Pair(new OperatorToken(Character.toString(c)), 1);
+            p = new Tuple(new OperatorToken(Character.toString(c)), 1, false);
 
-        return new Tuple(p, false);
+        return p;
     }
 
-    private Pair handleUnaryMinus(String content) {
+    private Tuple handleUnaryMinus(String content) {
         if (content.length() <= 1)
             return null;
 
@@ -187,7 +173,7 @@ public class Lexer {
         var t = (NumberToken) p.token;
 
         t.content = "-" + t.content;
-        return new Pair(t, p.index+1);
+        return new Tuple(t, p.index+1, false);
     }
 
     private NumberToken getNumberToken() {
@@ -196,7 +182,7 @@ public class Lexer {
         return (NumberToken) p.token;
     }
 
-    private Pair peekNumberToken(String content)
+    private Tuple peekNumberToken(String content)
     {
         int index = 0;
         while(index < content.length())
@@ -208,6 +194,6 @@ public class Lexer {
         }
 
         var t = new NumberToken(content.substring(0, index));
-        return new Pair(t, index);
+        return new Tuple(t, index, true);
     }
 }
