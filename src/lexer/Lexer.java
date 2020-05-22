@@ -16,7 +16,7 @@ public class Lexer {
 
     private static final TokenFactory reservedChars = new TokenFactory(
             new TokenFactory.Pair("+", (t, l) -> singleCharTokenToTuple(new OperatorToken("+"))),
-            new TokenFactory.Pair("-", Lexer::handleUnaryMinus),
+            new TokenFactory.Pair("-", Lexer::handleMinusToken),
             new TokenFactory.Pair("*", (t, l) -> singleCharTokenToTuple(new OperatorToken("*"))),
             new TokenFactory.Pair("/", (t, l) -> singleCharTokenToTuple(new OperatorToken("/"))),
             new TokenFactory.Pair(";", (t, l) -> new Tuple(new EndStmtToken(), 1, false)),
@@ -28,6 +28,12 @@ public class Lexer {
     private static Tuple singleCharTokenToTuple(Token t)
     {
         return new Tuple(t, t.content.length(), false);
+    }
+
+    private static Tuple handleMinusToken(String text, boolean lastTokenNumber)
+    {
+        var t = handleUnaryMinus(text, lastTokenNumber);
+        return Objects.requireNonNullElseGet(t, () -> new Tuple(new OperatorToken("-"), 1, false));
     }
 
     public Lexer(String input)
@@ -49,12 +55,6 @@ public class Lexer {
         var peekText = content.substring(textOffset);
 
         var c = peekText.charAt(0);
-        if (isOperator(c))
-        {
-            var p = handleOperator(peekText, c);
-            p.index += textOffset;
-            return p;
-        }
 
         var t = reservedChars.handle(peekText, lastTokenNumber);
         if (t != null)
@@ -120,25 +120,6 @@ public class Lexer {
         content = content.substring(p.index);
         lastTokenNumber = p.lastTokenNumber;
         return p.token;
-    }
-
-    private boolean isOperator(char c)
-    {
-        return c == '+' || c == '-' || c == '*' || c == '/';
-    }
-
-    private Tuple handleOperator(String content, char c)
-    {
-        Tuple p;
-        if (c == '-')
-        {
-            var t = handleUnaryMinus(content, lastTokenNumber);
-            p = Objects.requireNonNullElseGet(t, () -> new Tuple(new OperatorToken("-"), 1, false));
-        }
-        else
-            p = new Tuple(new OperatorToken(Character.toString(c)), 1, false);
-
-        return p;
     }
 
     private static Tuple handleUnaryMinus(String content, boolean lastTokenNumber)

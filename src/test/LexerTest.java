@@ -63,7 +63,7 @@ public class LexerTest {
             var l = new Lexer(op);
             var t = l.next();
             assertEquals(op, t.content);
-            assertTrue(t instanceof OperatorToken);
+            assertEquals(OperatorToken.class, t.getClass());
         }
     }
 
