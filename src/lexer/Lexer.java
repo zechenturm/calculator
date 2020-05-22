@@ -14,13 +14,21 @@ public class Lexer {
       "end"
     };
 
-    private static final char[] reservedChars = {';', '(', ')', '+', '-', '*', '/', '='};
+    private static final TokenFactory reservedChars = new TokenFactory(
+            new TokenFactory.Pair("+", () -> new OperatorToken("+")),
+            new TokenFactory.Pair("-", () -> new OperatorToken("-")),
+            new TokenFactory.Pair("*", () -> new OperatorToken("*")),
+            new TokenFactory.Pair("/", () -> new OperatorToken("/")),
+            new TokenFactory.Pair(";", EndStmtToken::new),
+            new TokenFactory.Pair("(", () ->new ParenToken("(")),
+            new TokenFactory.Pair(")", () ->new ParenToken(")")),
+            new TokenFactory.Pair("=", () ->new AssignToken("="))
+    );
 
     public Lexer(String input)
     {
         content = input;
     }
-
 
      private static class Tuple
     {
@@ -50,8 +58,7 @@ public class Lexer {
         var peekText = content.substring(textOffset);
 
         var c = peekText.charAt(0);
-        var i = isSingleCharToken(c);
-        if (i != -1)
+        if (reservedChars.handle(peekText) != null)
         {
             return handleSingleCharToken(textOffset, peekText, c);
         }
@@ -63,7 +70,7 @@ public class Lexer {
             return p;
         }
 
-        i = isReserved(peekText);
+        var i = isReserved(peekText);
         if (i != -1)
             return handleReserved(i, textOffset);
 
@@ -94,15 +101,7 @@ public class Lexer {
         return new Tuple(new ConditionalToken(word), textOffset+word.length(), false);
     }
 
-    private int isSingleCharToken(char c)
-    {
-        for (int i = 0; i < reservedChars.length; i++)
-            if (reservedChars[i] == c)
-                return i;
-        return -1;
-    }
-
-    private int isReserved(String peekText) {
+     private int isReserved(String peekText) {
         for (int i = 0; i < reservedWords.length; i++)
             if (peekText.startsWith(reservedWords[i]))
                 return i;
