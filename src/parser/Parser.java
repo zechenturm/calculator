@@ -66,12 +66,7 @@ public class Parser
 
     private void handleOperator(Token currentToken) {
         var t = lexer.next();
-        if (t instanceof NumberToken)
-            handleNumber(t);
-        else if (t instanceof IdentToken)
-            handleIdentifier(t);
-        else if (t instanceof ParenToken && t.content.equals("("))
-            evaluate();
+        handleToken(t);
 
         switch (currentToken.content) {
             case "+":
