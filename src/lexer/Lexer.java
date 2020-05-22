@@ -14,6 +14,8 @@ public class Lexer {
       "end"
     };
 
+    private static final char[] reservedChars = {';', '(', ')', '+', '-', '*', '/', '='};
+
     public Lexer(String input)
     {
         content = input;
@@ -58,42 +60,60 @@ public class Lexer {
         if (content.isEmpty())
             return new Tuple(new EOFToken(), 0, lastTokenNumber);
 
-        int index = getFirstNonSpace();
-        var peekText = content.substring(index);
+        int textOffset = getFirstNonSpace();
+        var peekText = content.substring(textOffset);
 
         var c = peekText.charAt(0);
-        if (isOperator(c))
+        var i = isSingleCharToken(c);
+        if (i != -1)
         {
-            var p = handleOperator(peekText, c);
-            p.index += index;
-            return p;
+            return handleSingleCharToken(textOffset, peekText, c);
         }
-        if (c == ';')
-            return new Tuple(new EndStmtToken(), index+1, false);
-        else if (c == '(')
-            return new Tuple(new ParenToken("("), index+1, false);
-        else if (c == ')')
-            return new Tuple(new ParenToken(")"), index+1, false);
-        else if (c == '=')
-            return new Tuple(new AssignToken("="), index+1, false);
-        else if (c >= '0' && c <= '9')
+
+        if (c >= '0' && c <= '9')
         {
             var p = peekNumberToken(peekText);
-            p.index += index;
+            p.index += textOffset;
             return new Tuple(p, true);
         }
 
-        var i = isReserved(peekText);
+        i = isReserved(peekText);
         if (i != -1)
-            return handleReserved(i, index);
+            return handleReserved(i, textOffset);
 
         var identEnd = getIdentifierEnd(peekText);
-        return new Tuple(new IdentToken(peekText.substring(0, identEnd)), index+identEnd, true);
+        return new Tuple(new IdentToken(peekText.substring(0, identEnd)), textOffset+identEnd, true);
+    }
+
+    private Tuple handleSingleCharToken(int textOffset, String peekText, char c) {
+        if (isOperator(c))
+        {
+            var p = handleOperator(peekText, c);
+            p.index += textOffset;
+            return p;
+        }
+        if (c == ';')
+            return new Tuple(new EndStmtToken(), textOffset+1, false);
+        else if (c == '(')
+            return new Tuple(new ParenToken("("), textOffset+1, false);
+        else if (c == ')')
+            return new Tuple(new ParenToken(")"), textOffset+1, false);
+        else if (c == '=')
+            return new Tuple(new AssignToken("="), textOffset+1, false);
+        return null;
     }
 
     private Tuple handleReserved(int kwIndex, int textOffset) {
         var word = reservedWords[kwIndex];
-        return new Tuple(new Pair(new ConditionalToken(word), textOffset+word.length()), false);
+        return new Tuple(new ConditionalToken(word), textOffset+word.length(), false);
+    }
+
+    private int isSingleCharToken(char c)
+    {
+        for (int i = 0; i < reservedChars.length; i++)
+            if (reservedChars[i] == c)
+                return i;
+        return -1;
     }
 
     private int isReserved(String peekText) {
