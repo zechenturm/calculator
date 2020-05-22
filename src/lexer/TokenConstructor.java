@@ -4,5 +4,5 @@ import token.Token;
 
 interface TokenConstructor
 {
-    Token construct();
+    Tuple construct(String text, boolean lastTokenNumber);
 }

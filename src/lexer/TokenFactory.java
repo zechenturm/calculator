@@ -23,10 +23,10 @@ class TokenFactory {
         this.pairs = pairs;
     }
 
-    public Token handle(String peekText) {
+    public Tuple handle(String peekText, boolean lastTokenNumber) {
         for (Pair pair : pairs)
             if (peekText.startsWith(pair.content))
-                return pair.constructor.construct();
+                return pair.constructor.construct(peekText, lastTokenNumber);
         return null;
     }
 }

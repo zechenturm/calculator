@@ -15,33 +15,24 @@ public class Lexer {
     };
 
     private static final TokenFactory reservedChars = new TokenFactory(
-            new TokenFactory.Pair("+", () -> new OperatorToken("+")),
-            new TokenFactory.Pair("-", () -> new OperatorToken("-")),
-            new TokenFactory.Pair("*", () -> new OperatorToken("*")),
-            new TokenFactory.Pair("/", () -> new OperatorToken("/")),
-            new TokenFactory.Pair(";", EndStmtToken::new),
-            new TokenFactory.Pair("(", () ->new ParenToken("(")),
-            new TokenFactory.Pair(")", () ->new ParenToken(")")),
-            new TokenFactory.Pair("=", () ->new AssignToken("="))
+            new TokenFactory.Pair("+", (t, l) -> singleCharTokenToTuple(new OperatorToken("+"))),
+            new TokenFactory.Pair("-", Lexer::handleUnaryMinus),
+            new TokenFactory.Pair("*", (t, l) -> singleCharTokenToTuple(new OperatorToken("*"))),
+            new TokenFactory.Pair("/", (t, l) -> singleCharTokenToTuple(new OperatorToken("/"))),
+            new TokenFactory.Pair(";", (t, l) -> new Tuple(new EndStmtToken(), 1, false)),
+            new TokenFactory.Pair("(", (t, l) -> singleCharTokenToTuple(new ParenToken("("))),
+            new TokenFactory.Pair(")", (t, l) -> singleCharTokenToTuple(new ParenToken(")"))),
+            new TokenFactory.Pair("=", (t, l) -> singleCharTokenToTuple(new AssignToken("=")))
     );
+
+    private static Tuple singleCharTokenToTuple(Token t)
+    {
+        return new Tuple(t, t.content.length(), false);
+    }
 
     public Lexer(String input)
     {
         content = input;
-    }
-
-     private static class Tuple
-    {
-        public Token token;
-        public int index;
-        public boolean lastTokenNumber;
-
-        public Tuple(Token t, int i, boolean lastTokenNumber)
-        {
-            token = t;
-            index = i;
-            this.lastTokenNumber = lastTokenNumber;
-        }
     }
 
     public Token peek()
@@ -65,9 +56,12 @@ public class Lexer {
             return p;
         }
 
-        var t = reservedChars.handle(peekText);
+        var t = reservedChars.handle(peekText, lastTokenNumber);
         if (t != null)
-            return new Tuple(t, textOffset+1, false);
+        {
+            t.index += textOffset;
+            return t;
+        }
 
         if (c >= '0' && c <= '9')
         {
@@ -139,8 +133,7 @@ public class Lexer {
         if (c == '-')
         {
             var t = handleUnaryMinus(content, lastTokenNumber);
-            t = Objects.requireNonNullElseGet(t, () -> new OperatorToken("-"));
-            p = new Tuple(t, t.content.length(), false);
+            p = Objects.requireNonNullElseGet(t, () -> new Tuple(new OperatorToken("-"), 1, false));
         }
         else
             p = new Tuple(new OperatorToken(Character.toString(c)), 1, false);
@@ -148,7 +141,8 @@ public class Lexer {
         return p;
     }
 
-    private static Token handleUnaryMinus(String content, boolean lastTokenNumber) {
+    private static Tuple handleUnaryMinus(String content, boolean lastTokenNumber)
+    {
         if (content.length() <= 1)
             return null;
 
@@ -161,7 +155,7 @@ public class Lexer {
         var t = (NumberToken) p.token;
 
         t.content = "-" + t.content;
-        return t;
+        return new Tuple(t, p.index+1, false);
     }
 
     private NumberToken getNumberToken() {
