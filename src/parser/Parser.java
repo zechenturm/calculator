@@ -35,44 +35,39 @@ public class Parser
             if (shouldBreak(currentToken))
                 break;
             if (currentToken instanceof NumberToken)
-                vm.push(Integer.parseInt(currentToken.content));
+                handleNumber(currentToken);
 
             if (currentToken instanceof IdentToken)
-            {
                 handleIdentifier(currentToken);
-            }
 
             if (currentToken instanceof ConditionalToken)
-            {
                 handleConditional(currentToken);
-            }
+
+            if (currentToken instanceof ParenToken)
+                evaluate();
 
             if (currentToken instanceof OperatorToken)
-            {
-                if (handleOperator(currentToken)) break;
-            }
+                handleOperator(currentToken);
         }
+    }
+
+    private void handleNumber(Token currentToken) {
+        vm.push(Integer.parseInt(currentToken.content));
     }
 
     private boolean shouldBreak(Token currentToken)
     {
-        return (currentToken instanceof EOFToken || currentToken instanceof EndStmtToken);
+        return (currentToken instanceof EOFToken || currentToken instanceof EndStmtToken || currentToken.content.equals(")"));
     }
 
-    private boolean handleOperator(Token currentToken) {
+    private void handleOperator(Token currentToken) {
         var t = lexer.next();
-        if (t instanceof ParenToken)
-        {
-            if (t.content.equals(")"))
-                return true;
-            else
-                evaluate();
-        }
-        else
-            if (t instanceof NumberToken)
-                vm.push(Integer.parseInt(t.content));
-            else
-                vm.load(lookup(t.content));
+        if (t instanceof NumberToken)
+            handleNumber(t);
+        else if (t instanceof IdentToken)
+            handleIdentifier(t);
+        else if (t instanceof ParenToken && t.content.equals("("))
+            evaluate();
 
         switch (currentToken.content) {
             case "+":
@@ -89,7 +84,6 @@ public class Parser
             case "/":
                 vm.div();
         }
-        return false;
     }
 
     private void handleConditional(Token currentToken) {
@@ -132,7 +126,7 @@ public class Parser
             if (t.content.equals("("))
                 evaluate();
             else
-                vm.push(Integer.parseInt(t.content));
+                handleNumber(t);
 
             if (tokenContent.equals("*"))
                 vm.mul();
