@@ -32,12 +32,10 @@ public class Parser
         while (true)
         {
             var currentToken = lexer.next();
-            if (currentToken instanceof EOFToken)
+            if (shouldBreak(currentToken))
                 break;
             if (currentToken instanceof NumberToken)
                 vm.push(Integer.parseInt(currentToken.content));
-            if (currentToken instanceof EndStmtToken)
-                break;
 
             if (currentToken instanceof IdentToken)
             {
@@ -54,6 +52,11 @@ public class Parser
                 if (handleOperator(currentToken)) break;
             }
         }
+    }
+
+    private boolean shouldBreak(Token currentToken)
+    {
+        return (currentToken instanceof EOFToken || currentToken instanceof EndStmtToken);
     }
 
     private boolean handleOperator(Token currentToken) {
