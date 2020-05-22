@@ -41,65 +41,79 @@ public class Parser
 
             if (currentToken instanceof IdentToken)
             {
-                var nextToken = lexer.peek();
-                if (nextToken instanceof AssignToken)
-                {
-                    var varIndex = lookup(currentToken.content);
-                    evaluate();
-                    vm.store(varIndex);
-                }
-                else
-                    vm.load(lookup(currentToken.content));
+                handleIdentifier(currentToken);
             }
 
             if (currentToken instanceof ConditionalToken)
             {
-                if (currentToken.content.equals("then"))
-                    break;
-                if (currentToken.content.equals("end"))
-                    break;
-                if (currentToken.content.equals("if")) {
-                    var currentIndex = labelIndex++;
-                    evaluate();
-                    vm.branchIfZero(currentIndex);
-                    evaluate();
-                    vm.label(currentIndex);
-                }
+                if (handleConditional(currentToken)) break;
             }
 
             if (currentToken instanceof OperatorToken)
             {
-                var t = lexer.next();
-                if (t instanceof ParenToken)
-                {
-                    if (t.content.equals(")"))
-                        break;
-                    else
-                        evaluate();
-                }
-                else
-                    if (t instanceof NumberToken)
-                        vm.push(Integer.parseInt(t.content));
-                    else
-                        vm.load(lookup(t.content));
-
-                switch (currentToken.content) {
-                    case "+":
-                        handlePunktvStrich();
-                        vm.add();
-                        break;
-                    case "-":
-                        handlePunktvStrich();
-                        vm.sub();
-                        break;
-                    case "*":
-                        vm.mul();
-                        break;
-                    case "/":
-                        vm.div();
-                }
+                if (handleOperator(currentToken)) break;
             }
         }
+    }
+
+    private boolean handleOperator(Token currentToken) {
+        var t = lexer.next();
+        if (t instanceof ParenToken)
+        {
+            if (t.content.equals(")"))
+                return true;
+            else
+                evaluate();
+        }
+        else
+            if (t instanceof NumberToken)
+                vm.push(Integer.parseInt(t.content));
+            else
+                vm.load(lookup(t.content));
+
+        switch (currentToken.content) {
+            case "+":
+                handlePunktvStrich();
+                vm.add();
+                break;
+            case "-":
+                handlePunktvStrich();
+                vm.sub();
+                break;
+            case "*":
+                vm.mul();
+                break;
+            case "/":
+                vm.div();
+        }
+        return false;
+    }
+
+    private boolean handleConditional(Token currentToken) {
+        if (currentToken.content.equals("then"))
+            return true;
+        if (currentToken.content.equals("end"))
+            return true;
+        if (currentToken.content.equals("if")) {
+            var currentIndex = labelIndex++;
+            evaluate();
+            vm.branchIfZero(currentIndex);
+            evaluate();
+            vm.label(currentIndex);
+        }
+        return false;
+    }
+
+    private void handleIdentifier(Token currentToken) {
+        var nextToken = lexer.peek();
+        if (nextToken instanceof AssignToken)
+        {
+            var varIndex = lookup(currentToken.content);
+            evaluate();
+            vm.store(varIndex);
+        }
+        else
+            vm.load(lookup(currentToken.content));
     }
 
     public int eval()
