@@ -38,13 +38,27 @@ public class CodeGenTest
         testSingle(CodeGen::divide, new ByteCode(ByteCode.Type.DIV));
     }
 
-    @Test void testMemoryAccess()
+    @Test
+    public void testMemoryAccess()
     {
         testSingle(cg -> cg.load(0), new ByteCode(ByteCode.Type.LOAD));
         testSingle(cg -> cg.load(1), new ByteCode(ByteCode.Type.LOAD, 1));
 
         testSingle(cg -> cg.store(0), new ByteCode(ByteCode.Type.STORE));
         testSingle(cg -> cg.store(1), new ByteCode(ByteCode.Type.STORE, 1));
+    }
+
+    @Test
+    public void testJumps()
+    {
+        testSingle(cg -> cg.label(0), new ByteCode(ByteCode.Type.LABEL, 0));
+        testSingle(cg -> cg.label(1), new ByteCode(ByteCode.Type.LABEL, 1));
+
+        testSingle(cg -> cg.jump(0), new ByteCode(ByteCode.Type.JUMP, 0));
+        testSingle(cg -> cg.jump(1), new ByteCode(ByteCode.Type.JUMP, 1));
+
+        testSingle(cg -> cg.branchIfZero(0), new ByteCode(ByteCode.Type.BR_IF_0, 0));
+        testSingle(cg -> cg.branchIfZero(1), new ByteCode(ByteCode.Type.BR_IF_0, 1));
 
     }
 }

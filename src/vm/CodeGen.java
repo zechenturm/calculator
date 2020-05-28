@@ -21,17 +21,17 @@ public class CodeGen implements VM
 
     @Override
     public void branchIfZero(int label) {
-
+        code = new ByteCode(ByteCode.Type.BR_IF_0, label);
     }
 
     @Override
     public void label(int index) {
-
+        code = new ByteCode(ByteCode.Type.LABEL, index);
     }
 
     @Override
     public void jump(int label) {
-
+        code = new ByteCode(ByteCode.Type.JUMP, label);
     }
 
     public ByteCode generate()

@@ -10,7 +10,10 @@ public class ByteCode
         ADD,
         SUB,
         MUL,
-        DIV
+        DIV,
+        LABEL,
+        JUMP,
+        BR_IF_0
     }
 
     public Type type;
