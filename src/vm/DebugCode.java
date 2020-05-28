@@ -9,31 +9,31 @@ public class DebugCode extends Interpreter {
     }
 
     @Override
-    public void sub() {
+    public void subtract() {
         printIgnored();
         System.out.println("sub");
-        super.sub();
+        super.subtract();
     }
 
     @Override
-    public void mul() {
+    public void multiply() {
         printIgnored();
         System.out.println("mul");
-        super.mul();
+        super.multiply();
     }
 
     @Override
-    public void div() {
+    public void divide() {
         printIgnored();
         System.out.println("div");
-        super.div();
+        super.divide();
     }
 
     @Override
-    public void push(int value) {
+    public void loadValue(int value) {
         printIgnored();
         System.out.println("push " + value);
-        super.push(value);
+        super.loadValue(value);
     }
 
     @Override

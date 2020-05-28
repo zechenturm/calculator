@@ -16,7 +16,7 @@ public class Interpreter implements VM
         stack.push(stack.pop() + stack.pop());
     }
 
-    public void sub()
+    public void subtract()
     {
         if (ignore > -1) return;
         var subtract = stack.pop();
@@ -24,13 +24,13 @@ public class Interpreter implements VM
         stack.push(subtractFrom - subtract);
     }
 
-    public void mul()
+    public void multiply()
     {
         if (ignore > -1) return;
         stack.push(stack.pop() * stack.pop());
     }
 
-    public void div()
+    public void divide()
     {
         if (ignore > -1) return;
         var dividend = stack.pop();
@@ -38,13 +38,12 @@ public class Interpreter implements VM
         stack.push(divisor / dividend);
     }
 
-    public void push(int num)
+    public void loadValue(int num)
     {
         if (ignore > -1) return;
         stack.push(num);
     }
 
-    @Override
     public int pop() {
         if (stack.isEmpty() || ignore > -1)
             return 0;
@@ -54,7 +53,7 @@ public class Interpreter implements VM
     public void load(int index)
     {
         if (ignore > -1) return;
-        push(vars.get(index));
+        loadValue(vars.get(index));
     }
 
     public void store(int index)

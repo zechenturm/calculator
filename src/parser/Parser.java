@@ -2,7 +2,6 @@ package parser;
 
 import lexer.Lexer;
 import token.*;
-import vm.Interpreter;
 import vm.VM;
 
 import java.util.ArrayList;
@@ -22,12 +21,7 @@ public class Parser
         this.vm = vm;
     }
 
-    public Parser(Lexer l)
-    {
-        this(l, new Interpreter());
-    }
-
-    private void evaluate()
+    public void parse()
     {
         while (true)
         {
@@ -50,7 +44,7 @@ public class Parser
             handleConditional(currentToken);
 
         if (currentToken instanceof ParenToken)
-            evaluate();
+            parse();
 
         if (currentToken instanceof OperatorToken)
             handleOperator(currentToken);
@@ -58,7 +52,7 @@ public class Parser
 
     private void handleNumber(Token currentToken)
     {
-        vm.push(Integer.parseInt(currentToken.content));
+        vm.loadValue(Integer.parseInt(currentToken.content));
     }
 
     private boolean shouldBreak(Token currentToken)
@@ -81,10 +75,10 @@ public class Parser
             case "-" ->
             {
                 handlePunktvStrich();
-                vm.sub();
+                vm.subtract();
             }
-            case "*" -> vm.mul();
-            case "/" -> vm.div();
+            case "*" -> vm.multiply();
+            case "/" -> vm.divide();
         }
     }
 
@@ -116,17 +110,11 @@ public class Parser
         if (nextToken instanceof AssignToken)
         {
             var varIndex = lookup(currentToken.content);
-            evaluate();
+            parse();
             vm.store(varIndex);
         }
         else
             vm.load(lookup(currentToken.content));
-    }
-
-    public int eval()
-    {
-        evaluate();
-        return vm.pop();
     }
 
     private void handlePunktvStrich()

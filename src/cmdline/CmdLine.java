@@ -2,6 +2,7 @@ package cmdline;
 
 import lexer.Lexer;
 import parser.Parser;
+import vm.Interpreter;
 
 public class CmdLine {
     public static void main(String[] args)
@@ -12,8 +13,9 @@ public class CmdLine {
             builder.append(str);
         }
         var l = new Lexer(builder.toString());
-        var p = new Parser(l);
+        var i = new Interpreter();
+        var p = new Parser(l, i);
         System.out.println(builder.toString());
-        System.out.println(p.eval());
+        System.out.println(i.pop());
     }
 }

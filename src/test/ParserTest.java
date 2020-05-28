@@ -4,11 +4,30 @@ import lexer.Lexer;
 import org.junit.jupiter.api.Test;
 import parser.Parser;
 import vm.DebugCode;
+import vm.Interpreter;
+import vm.VM;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ParserTest
 {
+    private static class Parser
+    {
+        parser.Parser p;
+        Interpreter i;
+
+        public Parser(Lexer l)
+        {
+            i = new Interpreter();
+            p = new parser.Parser(l, i);
+        }
+
+        public int eval()
+        {
+            p.parse();
+            return i.pop();
+        }
+    }
     @Test
     public void TestCreate()
     {
