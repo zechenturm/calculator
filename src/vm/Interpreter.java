@@ -84,4 +84,12 @@ public class Interpreter implements VM
         if (ignore == index)
             ignore = -1;
     }
+
+    @Override
+    public void jump(int label)
+    {
+        if (ignore != -1)
+            return;
+        ignore = label;
+    }
 }

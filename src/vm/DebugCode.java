@@ -71,6 +71,13 @@ public class DebugCode extends Interpreter {
         super.label(index);
     }
 
+    @Override
+    public void jump(int label) {
+        printIgnored();
+        System.out.println("jmp " + label);
+        super.jump(label);
+    }
+
     private void printIgnored()
     {
         if (ignore != -1)
