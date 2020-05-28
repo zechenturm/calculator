@@ -11,12 +11,12 @@ public class CodeGen implements VM
 
     @Override
     public void load(int index) {
-
+        code = new ByteCode(ByteCode.Type.LOAD, index);
     }
 
     @Override
     public void store(int index) {
-
+        code = new ByteCode(ByteCode.Type.STORE, index);
     }
 
     @Override

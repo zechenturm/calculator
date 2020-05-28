@@ -37,4 +37,14 @@ public class CodeGenTest
         testSingle(CodeGen::multiply, new ByteCode(ByteCode.Type.MUL));
         testSingle(CodeGen::divide, new ByteCode(ByteCode.Type.DIV));
     }
+
+    @Test void testMemoryAccess()
+    {
+        testSingle(cg -> cg.load(0), new ByteCode(ByteCode.Type.LOAD));
+        testSingle(cg -> cg.load(1), new ByteCode(ByteCode.Type.LOAD, 1));
+
+        testSingle(cg -> cg.store(0), new ByteCode(ByteCode.Type.STORE));
+        testSingle(cg -> cg.store(1), new ByteCode(ByteCode.Type.STORE, 1));
+
+    }
 }

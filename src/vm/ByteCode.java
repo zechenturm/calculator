@@ -5,6 +5,8 @@ public class ByteCode
     public enum Type
     {
         LOAD_VALUE,
+        LOAD,
+        STORE,
         ADD,
         SUB,
         MUL,
