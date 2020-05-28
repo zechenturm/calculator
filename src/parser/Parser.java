@@ -38,7 +38,8 @@ public class Parser
         }
     }
 
-    private void handleToken(Token currentToken) {
+    private void handleToken(Token currentToken)
+    {
         if (currentToken instanceof NumberToken)
             handleNumber(currentToken);
 
@@ -55,7 +56,8 @@ public class Parser
             handleOperator(currentToken);
     }
 
-    private void handleNumber(Token currentToken) {
+    private void handleNumber(Token currentToken)
+    {
         vm.push(Integer.parseInt(currentToken.content));
     }
 
@@ -64,29 +66,32 @@ public class Parser
         return (currentToken instanceof EOFToken || currentToken instanceof EndStmtToken || currentToken.content.equals(")"));
     }
 
-    private void handleOperator(Token currentToken) {
+    private void handleOperator(Token currentToken)
+    {
         var t = lexer.next();
         handleToken(t);
 
-        switch (currentToken.content) {
-            case "+":
+        switch (currentToken.content)
+        {
+            case "+" ->
+            {
                 handlePunktvStrich();
                 vm.add();
-                break;
-            case "-":
+            }
+            case "-" ->
+            {
                 handlePunktvStrich();
                 vm.sub();
-                break;
-            case "*":
-                vm.mul();
-                break;
-            case "/":
-                vm.div();
+            }
+            case "*" -> vm.mul();
+            case "/" -> vm.div();
         }
     }
 
-    private void handleConditional(Token currentToken) {
-        if (currentToken.content.equals("if")) {
+    private void handleConditional(Token currentToken)
+    {
+        if (currentToken.content.equals("if"))
+        {
             var currentIndex = labelIndex++;
             handleToken(lexer.next());
             vm.branchIfZero(currentIndex);
@@ -95,7 +100,8 @@ public class Parser
         }
     }
 
-    private void handleIdentifier(Token currentToken) {
+    private void handleIdentifier(Token currentToken)
+    {
         var nextToken = lexer.peek();
         if (nextToken instanceof AssignToken)
         {
