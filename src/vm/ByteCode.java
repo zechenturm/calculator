@@ -4,7 +4,11 @@ public class ByteCode
 {
     public enum Type
     {
-        LOAD_VALUE
+        LOAD_VALUE,
+        ADD,
+        SUB,
+        MUL,
+        DIV
     }
 
     public Type type;

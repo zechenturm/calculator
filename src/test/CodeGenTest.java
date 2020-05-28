@@ -28,4 +28,13 @@ public class CodeGenTest
         testSingle(cg -> cg.loadValue(0), new ByteCode(ByteCode.Type.LOAD_VALUE, 0));
         testSingle(cg -> cg.loadValue(1), new ByteCode(ByteCode.Type.LOAD_VALUE, 1));
     }
+
+    @Test
+    public void testOperators()
+    {
+        testSingle(CodeGen::add, new ByteCode(ByteCode.Type.ADD, 0));
+        testSingle(CodeGen::sub, new ByteCode(ByteCode.Type.SUB, 0));
+        testSingle(CodeGen::multiply, new ByteCode(ByteCode.Type.MUL, 0));
+        testSingle(CodeGen::divide, new ByteCode(ByteCode.Type.DIV, 0));
+    }
 }
