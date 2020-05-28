@@ -32,9 +32,9 @@ public class CodeGenTest
     @Test
     public void testOperators()
     {
-        testSingle(CodeGen::add, new ByteCode(ByteCode.Type.ADD, 0));
-        testSingle(CodeGen::sub, new ByteCode(ByteCode.Type.SUB, 0));
-        testSingle(CodeGen::multiply, new ByteCode(ByteCode.Type.MUL, 0));
-        testSingle(CodeGen::divide, new ByteCode(ByteCode.Type.DIV, 0));
+        testSingle(CodeGen::add, new ByteCode(ByteCode.Type.ADD));
+        testSingle(CodeGen::sub, new ByteCode(ByteCode.Type.SUB));
+        testSingle(CodeGen::multiply, new ByteCode(ByteCode.Type.MUL));
+        testSingle(CodeGen::divide, new ByteCode(ByteCode.Type.DIV));
     }
 }

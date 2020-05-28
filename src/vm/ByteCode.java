@@ -20,6 +20,11 @@ public class ByteCode
         data = value;
     }
 
+    public ByteCode(Type t)
+    {
+        this(t, 0);
+    }
+
     @Override
     public boolean equals(Object other)
     {
