@@ -88,9 +88,9 @@ public class Parser
     private void handleConditional(Token currentToken) {
         if (currentToken.content.equals("if")) {
             var currentIndex = labelIndex++;
-            evaluate();
+            handleToken(lexer.next());
             vm.branchIfZero(currentIndex);
-            evaluate();
+            handleToken(lexer.next());
             vm.label(currentIndex);
         }
     }
