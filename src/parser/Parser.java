@@ -96,7 +96,17 @@ public class Parser
             handleToken(lexer.next());
             vm.branchIfZero(currentIndex);
             handleToken(lexer.next());
+            var hasElse = lexer.peek().content.equals("else");
+            var elseLabel = labelIndex++;
+            if (hasElse)
+                vm.jump(elseLabel);
             vm.label(currentIndex);
+            if (hasElse)
+            {
+                lexer.next(); //consume "else" token we already peeked at
+                handleToken(lexer.next());
+                vm.label(elseLabel);
+            }
         }
     }
 

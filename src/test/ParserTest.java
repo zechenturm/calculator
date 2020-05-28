@@ -236,4 +236,36 @@ public class ParserTest
         p = new Parser(l);
         assertEquals(20, p.eval());
     }
+
+    @Test
+    public void testIfElse()
+    {
+        var l = new Lexer("if 0 1 else 10");
+        var p = new Parser(l);
+        assertEquals(10, p.eval());
+
+        l = new Lexer("if 1 1 else 10");
+        p = new Parser(l);
+        assertEquals(1, p.eval());
+
+        l = new Lexer("if 1 if 0 20 else 15 else 10");
+        p = new Parser(l);
+        assertEquals(15, p.eval());
+
+        l = new Lexer("x = 1; y = 0; if x y = 10; else y = y + 10; y");
+        p = new Parser(l);
+        assertEquals(10, p.eval());
+
+        l = new Lexer("x = 0; y = 2; if x y = 10; else y = y + 10; y");
+        p = new Parser(l);
+        assertEquals(12, p.eval());
+
+        l = new Lexer("x = 1; y = 1; z = 2; if x if y z = 10; else z = z + 10; z");
+        p = new Parser(l);
+        assertEquals(10, p.eval());
+
+        l = new Lexer("x = 1; y = 0; z = 2; if x if y z = 10; else z = z + 10; z");
+        p = new Parser(l);
+        assertEquals(12, p.eval());
+    }
 }

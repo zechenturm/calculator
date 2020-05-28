@@ -12,7 +12,7 @@ Planned features:
 - [x] parentheses
 - [x] multiline programs
 - [x] variable declarations
-- [ ] if-else expression
+- [x] if-else expression
 - [ ] builtin functions
 - [ ] byte code compiler
 - [ ] VM to run byte code
