@@ -1,12 +1,37 @@
 package vm;
 
-public class CodeGen
+public class CodeGen implements VM
 {
     private ByteCode code;
 
     public void loadValue(int value)
     {
         code = new ByteCode(ByteCode.Type.LOAD_VALUE, value);
+    }
+
+    @Override
+    public void load(int index) {
+
+    }
+
+    @Override
+    public void store(int index) {
+
+    }
+
+    @Override
+    public void branchIfZero(int label) {
+
+    }
+
+    @Override
+    public void label(int index) {
+
+    }
+
+    @Override
+    public void jump(int label) {
+
     }
 
     public ByteCode generate()
@@ -19,8 +44,8 @@ public class CodeGen
         code = new ByteCode(ByteCode.Type.ADD, 0);
     }
 
-    public void sub()
-    {
+    @Override
+    public void subtract() {
         code = new ByteCode(ByteCode.Type.SUB, 0);
     }
 

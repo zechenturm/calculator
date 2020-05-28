@@ -33,7 +33,7 @@ public class CodeGenTest
     public void testOperators()
     {
         testSingle(CodeGen::add, new ByteCode(ByteCode.Type.ADD));
-        testSingle(CodeGen::sub, new ByteCode(ByteCode.Type.SUB));
+        testSingle(CodeGen::subtract, new ByteCode(ByteCode.Type.SUB));
         testSingle(CodeGen::multiply, new ByteCode(ByteCode.Type.MUL));
         testSingle(CodeGen::divide, new ByteCode(ByteCode.Type.DIV));
     }
