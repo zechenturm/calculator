@@ -1,61 +1,64 @@
 package vm;
 
+import java.util.ArrayList;
+
 public class CodeGen implements VM
 {
-    private ByteCode code;
+    private ArrayList<ByteCode> code = new ArrayList<>();
 
     public void loadValue(int value)
     {
-        code = new ByteCode(ByteCode.Type.LOAD_VALUE, value);
+        code.add(new ByteCode(ByteCode.Type.LOAD_VALUE, value));
     }
 
     @Override
     public void load(int index) {
-        code = new ByteCode(ByteCode.Type.LOAD, index);
+        code.add(new ByteCode(ByteCode.Type.LOAD, index));
     }
 
     @Override
     public void store(int index) {
-        code = new ByteCode(ByteCode.Type.STORE, index);
+        code.add(new ByteCode(ByteCode.Type.STORE, index));
     }
 
     @Override
     public void branchIfZero(int label) {
-        code = new ByteCode(ByteCode.Type.BR_IF_0, label);
+        code.add(new ByteCode(ByteCode.Type.BR_IF_0, label));
     }
 
     @Override
     public void label(int index) {
-        code = new ByteCode(ByteCode.Type.LABEL, index);
+        code.add(new ByteCode(ByteCode.Type.LABEL, index));
     }
 
     @Override
     public void jump(int label) {
-        code = new ByteCode(ByteCode.Type.JUMP, label);
-    }
-
-    public ByteCode generate()
-    {
-        return code;
+        code.add(new ByteCode(ByteCode.Type.JUMP, label));
     }
 
     public void add()
     {
-        code = new ByteCode(ByteCode.Type.ADD, 0);
+        code.add(new ByteCode(ByteCode.Type.ADD, 0));
     }
 
     @Override
     public void subtract() {
-        code = new ByteCode(ByteCode.Type.SUB, 0);
+        code.add(new ByteCode(ByteCode.Type.SUB, 0));
     }
 
     public void multiply()
     {
-        code = new ByteCode(ByteCode.Type.MUL, 0);
+        code.add(new ByteCode(ByteCode.Type.MUL, 0));
     }
 
     public void divide()
     {
-        code = new ByteCode(ByteCode.Type.DIV, 0);
+        code.add(new ByteCode(ByteCode.Type.DIV, 0));
+    }
+
+    public ByteCode[] generate()
+    {
+        var a = new ByteCode[code.size()];
+        return code.toArray(a);
     }
 }
