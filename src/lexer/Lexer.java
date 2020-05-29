@@ -24,8 +24,9 @@ public class Lexer {
             new TokenFactory.Pair("if", (t, l) -> nonNumberTokenToTuple(new ConditionalToken("if"))),
             new TokenFactory.Pair("then", (t, l) -> nonNumberTokenToTuple(new ConditionalToken("then"))),
             new TokenFactory.Pair("else", (t, l) -> nonNumberTokenToTuple(new ConditionalToken("else"))),
-            new TokenFactory.Pair("end", (t, l) -> nonNumberTokenToTuple(new ConditionalToken("end")))
-
+            new TokenFactory.Pair("end", (t, l) -> nonNumberTokenToTuple(new ConditionalToken("end"))),
+            new TokenFactory.Pair(":in", (t, l) -> nonNumberTokenToTuple(new BuiltinFuncToken("in")).plusOffset(1)),
+            new TokenFactory.Pair(":out", (t, l) -> nonNumberTokenToTuple(new BuiltinFuncToken("out")).plusOffset(1))
     );
 
     private static Tuple nonNumberTokenToTuple(Token t)

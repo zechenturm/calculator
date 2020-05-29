@@ -351,4 +351,28 @@ public class LexerTest {
         }
     }
 
+    private void testTokens(String input, Token ...expectedTokens)
+    {
+        var l = new Lexer(input);
+        for (var token : expectedTokens)
+        {
+            var t = l.next();
+            assertEquals(token.content, t.content);
+            assertEquals(token.getClass(), t.getClass());
+        }
+    }
+
+    @Test
+    public void testBuiltinFunctions()
+    {
+        testTokens(":in", new BuiltinFuncToken("in"));
+        testTokens(":in + 1", new BuiltinFuncToken("in"),
+                                 new OperatorToken("+"),
+                                 new NumberToken("1"));
+
+        testTokens(":out", new BuiltinFuncToken("out"));
+        testTokens(":out 1", new BuiltinFuncToken("out"),
+                                  new NumberToken("1"));
+    }
+
 }
