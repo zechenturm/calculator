@@ -25,13 +25,20 @@ public class Lexer {
             new TokenFactory.Pair("then", (t, l) -> nonNumberTokenToTuple(new ConditionalToken("then"))),
             new TokenFactory.Pair("else", (t, l) -> nonNumberTokenToTuple(new ConditionalToken("else"))),
             new TokenFactory.Pair("end", (t, l) -> nonNumberTokenToTuple(new ConditionalToken("end"))),
-            new TokenFactory.Pair(":in", (t, l) -> nonNumberTokenToTuple(new BuiltinFuncToken("in")).plusOffset(1)),
-            new TokenFactory.Pair(":out", (t, l) -> nonNumberTokenToTuple(new BuiltinFuncToken("out")).plusOffset(1))
+            new TokenFactory.Pair(":", Lexer::handleBuiltin)
     );
 
     private static Tuple nonNumberTokenToTuple(Token t)
     {
         return new Tuple(t, t.content.length(), false);
+    }
+
+    private static Tuple handleBuiltin(String text, boolean lastTokenNumber)
+    {
+        var rest = text.substring(1);
+        var end = getIdentifierEnd(rest);
+        var name = rest.substring(0, end);
+        return new Tuple(new BuiltinFuncToken(name), name.length()+1, false);
     }
 
     public Lexer(String input)
@@ -72,7 +79,7 @@ public class Lexer {
         return index;
     }
 
-    private int getIdentifierEnd(String content)
+    private static int getIdentifierEnd(String content)
     {
         var index = 0;
         var c =content.charAt(index);

@@ -373,6 +373,8 @@ public class LexerTest {
         testTokens(":out", new BuiltinFuncToken("out"));
         testTokens(":out 1", new BuiltinFuncToken("out"),
                                   new NumberToken("1"));
+
+        testTokens(":mysuperawesomefunction", new BuiltinFuncToken("mysuperawesomefunction"));
     }
 
 }
