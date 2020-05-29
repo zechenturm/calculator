@@ -292,14 +292,14 @@ public class ParserTest
     public void testBuiltinFunctions()
     {
         var l = new Lexer(":in");
-        var cg = new CodeGen();
-        var p = new Parser(l, cg, new String[]{"in"});
+        var cg = new CodeGen(new String[] {"in"});
+        var p = new Parser(l, cg);
         p.parse();
         assertEquals(new ByteCode(ByteCode.Type.CALL, 0),cg.generate()[0]);
 
         l = new Lexer(":out :in");
-        cg = new CodeGen();
-        p = new Parser(l, cg, new String[]{"in", "out"});
+        cg = new CodeGen(new String[] {"in", "out"});
+        p = new Parser(l, cg);
         p.parse();
         assertEquals(new ByteCode(ByteCode.Type.CALL, 1),cg.generate()[0]);
         assertEquals(new ByteCode(ByteCode.Type.CALL, 0),cg.generate()[1]);

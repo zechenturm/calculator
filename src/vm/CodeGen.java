@@ -5,11 +5,16 @@ import java.util.ArrayList;
 public class CodeGen implements VM
 {
     private ArrayList<ByteCode> code = new ArrayList<>();
-//    private final String[] builtins;
+    private final String[] builtins;
+
+    public CodeGen(String[] builtinFunctions)
+    {
+        builtins = builtinFunctions;
+    }
 
     public CodeGen()
     {
-//        builtins = builtinFunctions;
+        builtins = new String[0];
     }
 
     public void loadValue(int value)
@@ -65,6 +70,11 @@ public class CodeGen implements VM
     public void divide()
     {
         code.add(new ByteCode(ByteCode.Type.DIV, 0));
+    }
+
+    @Override
+    public String[] getBuiltinFunctions() {
+        return builtins;
     }
 
     public ByteCode[] generate()

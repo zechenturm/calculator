@@ -96,4 +96,9 @@ public class Interpreter implements VM
     public void call(int index) {
         //ignore for now
     }
+
+    @Override
+    public String[] getBuiltinFunctions() {
+        return new String[0];
+    }
 }

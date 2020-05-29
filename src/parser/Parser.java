@@ -16,16 +16,11 @@ public class Parser
     private int labelIndex = 0;
     private final String[] builtins;
 
-    public Parser(Lexer l, VM vm, String[] builtinFunctions)
+    public Parser(Lexer l, VM vm)
     {
         lexer = l;
         this.vm = vm;
-        builtins = builtinFunctions;
-    }
-
-    public Parser(Lexer l, VM vm)
-    {
-        this(l, vm, new String[0]);
+        builtins = vm.getBuiltinFunctions();
     }
 
     public void parse()

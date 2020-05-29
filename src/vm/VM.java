@@ -12,4 +12,6 @@ public interface VM {
     void label(int index);
     void jump (int label);
     void call(int index);
+
+    String[] getBuiltinFunctions();
 }
