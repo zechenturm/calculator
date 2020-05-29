@@ -14,11 +14,18 @@ public class Parser
     ArrayList<String> symbolTable = new ArrayList<>();
 
     private int labelIndex = 0;
+    private final String[] builtins;
 
-    public Parser(Lexer l, VM vm)
+    public Parser(Lexer l, VM vm, String[] builtinFunctions)
     {
         lexer = l;
         this.vm = vm;
+        builtins = builtinFunctions;
+    }
+
+    public Parser(Lexer l, VM vm)
+    {
+        this(l, vm, new String[0]);
     }
 
     public void parse()
@@ -40,6 +47,9 @@ public class Parser
         if (currentToken instanceof IdentToken)
             handleIdentifier(currentToken);
 
+        if(currentToken instanceof BuiltinFuncToken)
+            handleBuiltinFuncToken(currentToken);
+
         if (currentToken instanceof ConditionalToken)
             handleConditional(currentToken);
 
@@ -48,6 +58,18 @@ public class Parser
 
         if (currentToken instanceof OperatorToken)
             handleOperator(currentToken);
+    }
+
+    private void handleBuiltinFuncToken(Token currentToken)
+    {
+        int index = -1;
+        for (var i = 0; i < builtins.length; i++)
+            if (builtins[i].equals(currentToken.content))
+            {
+                index = i;
+                break;
+            }
+        vm.call(index);
     }
 
     private void handleNumber(Token currentToken)

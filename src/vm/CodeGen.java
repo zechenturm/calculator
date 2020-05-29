@@ -5,6 +5,12 @@ import java.util.ArrayList;
 public class CodeGen implements VM
 {
     private ArrayList<ByteCode> code = new ArrayList<>();
+//    private final String[] builtins;
+
+    public CodeGen()
+    {
+//        builtins = builtinFunctions;
+    }
 
     public void loadValue(int value)
     {
@@ -34,6 +40,11 @@ public class CodeGen implements VM
     @Override
     public void jump(int label) {
         code.add(new ByteCode(ByteCode.Type.JUMP, label));
+    }
+
+    @Override
+    public void call(int index) {
+        code.add(new ByteCode(ByteCode.Type.CALL, index));
     }
 
     public void add()

@@ -13,7 +13,8 @@ public class ByteCode
         DIV,
         LABEL,
         JUMP,
-        BR_IF_0
+        BR_IF_0,
+        CALL
     }
 
     public Type type;

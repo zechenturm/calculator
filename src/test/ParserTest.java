@@ -3,6 +3,8 @@ package test;
 import lexer.Lexer;
 import org.junit.jupiter.api.Test;
 import parser.Parser;
+import vm.ByteCode;
+import vm.CodeGen;
 import vm.Interpreter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -284,5 +286,22 @@ public class ParserTest
         l = new Lexer("x = 1; y = 0; z = 2; if x if y z = 10; else z = z + 10; z");
         p = new TestParser(l);
         assertEquals(12, p.eval());
+    }
+
+    @Test
+    public void testBuiltinFunctions()
+    {
+        var l = new Lexer(":in");
+        var cg = new CodeGen();
+        var p = new Parser(l, cg, new String[]{"in"});
+        p.parse();
+        assertEquals(new ByteCode(ByteCode.Type.CALL, 0),cg.generate()[0]);
+
+        l = new Lexer(":out :in");
+        cg = new CodeGen();
+        p = new Parser(l, cg, new String[]{"in", "out"});
+        p.parse();
+        assertEquals(new ByteCode(ByteCode.Type.CALL, 1),cg.generate()[0]);
+        assertEquals(new ByteCode(ByteCode.Type.CALL, 0),cg.generate()[1]);
     }
 }

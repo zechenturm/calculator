@@ -91,4 +91,9 @@ public class Interpreter implements VM
             return;
         ignore = label;
     }
+
+    @Override
+    public void call(int index) {
+        //ignore for now
+    }
 }

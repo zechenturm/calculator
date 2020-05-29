@@ -11,4 +11,5 @@ public interface VM {
     void branchIfZero(int label);
     void label(int index);
     void jump (int label);
+    void call(int index);
 }
