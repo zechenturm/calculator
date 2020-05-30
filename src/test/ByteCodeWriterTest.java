@@ -77,4 +77,26 @@ public class ByteCodeWriterTest
                         (byte) ByteCode.Type.ADD.ordinal()
                 });
     }
+
+    @Test
+    public void testJumps()
+    {
+        testMultiple(new ByteCode[]{
+                        new ByteCode(ByteCode.Type.LABEL, 0),
+                        new ByteCode(ByteCode.Type.JUMP, 0)},
+                new byte[]{
+                        (byte) ByteCode.Type.JUMP.ordinal(), 0, 0, 0, 0
+                });
+
+        testMultiple(new ByteCode[]{
+                        new ByteCode(ByteCode.Type.LOAD_VALUE, 3),
+                        new ByteCode(ByteCode.Type.LABEL, 0),
+                        new ByteCode(ByteCode.Type.ADD),
+                        new ByteCode(ByteCode.Type.JUMP, 0)},
+                new byte[]{
+                        (byte) ByteCode.Type.LOAD_VALUE.ordinal(), 0, 0, 0, 3,
+                        (byte) ByteCode.Type.ADD.ordinal(),
+                        (byte) ByteCode.Type.JUMP.ordinal(), 0, 0, 0, 5
+                });
+    }
 }
