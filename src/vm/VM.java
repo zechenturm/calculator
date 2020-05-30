@@ -1,5 +1,7 @@
 package vm;
 
+import parser.FunctionSignature;
+
 public interface VM {
     void add();
     void subtract();
@@ -13,5 +15,5 @@ public interface VM {
     void jump (int label);
     void call(int index);
 
-    String[] getBuiltinFunctions();
+    FunctionSignature[] getBuiltinFunctions();
 }

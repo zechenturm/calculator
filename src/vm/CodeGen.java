@@ -1,20 +1,22 @@
 package vm;
 
+import parser.FunctionSignature;
+
 import java.util.ArrayList;
 
 public class CodeGen implements VM
 {
     private ArrayList<ByteCode> code = new ArrayList<>();
-    private final String[] builtins;
+    private final FunctionSignature[] builtins;
 
-    public CodeGen(String[] builtinFunctions)
+    public CodeGen(FunctionSignature[] builtinFunctions)
     {
         builtins = builtinFunctions;
     }
 
     public CodeGen()
     {
-        builtins = new String[0];
+        builtins = new FunctionSignature[0];
     }
 
     public void loadValue(int value)
@@ -73,7 +75,7 @@ public class CodeGen implements VM
     }
 
     @Override
-    public String[] getBuiltinFunctions() {
+    public FunctionSignature[] getBuiltinFunctions() {
         return builtins;
     }
 

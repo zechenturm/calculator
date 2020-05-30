@@ -1,5 +1,7 @@
 package vm;
 
+import parser.FunctionSignature;
+
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -98,7 +100,7 @@ public class Interpreter implements VM
     }
 
     @Override
-    public String[] getBuiltinFunctions() {
-        return new String[0];
+    public FunctionSignature[] getBuiltinFunctions() {
+        return new FunctionSignature[0];
     }
 }

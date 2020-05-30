@@ -2,6 +2,7 @@ package test;
 
 import lexer.Lexer;
 import org.junit.jupiter.api.Test;
+import parser.FunctionSignature;
 import parser.Parser;
 import vm.ByteCode;
 import vm.CodeGen;
@@ -288,7 +289,7 @@ public class ParserTest
         assertEquals(12, p.eval());
     }
 
-    private void testByteCode(String input, String[] builtins, ByteCode[] expectedCode)
+    private void testByteCode(String input, FunctionSignature[] builtins, ByteCode[] expectedCode)
     {
         var l = new Lexer(input);
         var cg = new CodeGen(builtins);
@@ -304,16 +305,60 @@ public class ParserTest
     public void testBuiltinFunctions()
     {
         testByteCode(":in",
-                new String[]{"in"},
+                new FunctionSignature[]{
+                        new FunctionSignature("in", 0),},
                 new ByteCode[]{
                         new ByteCode(ByteCode.Type.CALL, 0)
                 });
 
         testByteCode(":out :in",
-                new String[]{"in", "out"},
+                new FunctionSignature[]{
+                        new FunctionSignature("in", 0),
+                        new FunctionSignature("out", 1)},
                 new ByteCode[]{
                         new ByteCode(ByteCode.Type.CALL, 0),
                         new ByteCode(ByteCode.Type.CALL, 1)
+                });
+
+        testByteCode(":out 1",
+                new FunctionSignature[]{
+                        new FunctionSignature("out", 1),},
+                new ByteCode[]{
+                        new ByteCode(ByteCode.Type.LOAD_VALUE, 1),
+                        new ByteCode(ByteCode.Type.CALL, 0)
+                });
+
+        testByteCode(":add 1 2",
+                new FunctionSignature[]{
+                        new FunctionSignature("add", 2)},
+                new ByteCode[]{
+                        new ByteCode(ByteCode.Type.LOAD_VALUE, 1),
+                        new ByteCode(ByteCode.Type.LOAD_VALUE, 2),
+                        new ByteCode(ByteCode.Type.CALL, 0)
+                });
+
+        testByteCode(":add :in 2",
+                new FunctionSignature[]{
+                        new FunctionSignature("add", 2),
+                        new FunctionSignature("in", 0)},
+                new ByteCode[]{
+                        new ByteCode(ByteCode.Type.CALL, 1),
+                        new ByteCode(ByteCode.Type.LOAD_VALUE, 2),
+                        new ByteCode(ByteCode.Type.CALL, 0)
+                });
+
+        testByteCode(":twoargs (3 + :in) (2+7)",
+                new FunctionSignature[]{
+                        new FunctionSignature("twoargs", 2),
+                        new FunctionSignature("in", 0)},
+                new ByteCode[]{
+                        new ByteCode(ByteCode.Type.LOAD_VALUE, 3),
+                        new ByteCode(ByteCode.Type.CALL, 1),
+                        new ByteCode(ByteCode.Type.ADD),
+                        new ByteCode(ByteCode.Type.LOAD_VALUE, 2),
+                        new ByteCode(ByteCode.Type.LOAD_VALUE, 7),
+                        new ByteCode(ByteCode.Type.ADD),
+                        new ByteCode(ByteCode.Type.CALL, 0)
                 });
     }
 }

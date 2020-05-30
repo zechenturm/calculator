@@ -14,7 +14,7 @@ public class Parser
     ArrayList<String> symbolTable = new ArrayList<>();
 
     private int labelIndex = 0;
-    private final String[] builtins;
+    private final FunctionSignature[] builtins;
 
     public Parser(Lexer l, VM vm)
     {
@@ -59,12 +59,13 @@ public class Parser
     {
         int index = -1;
         for (var i = 0; i < builtins.length; i++)
-            if (builtins[i].equals(currentToken.content))
+            if (builtins[i].name.equals(currentToken.content))
             {
                 index = i;
                 break;
             }
-        handleToken(lexer.next());
+        for (int i = 0; i < builtins[index].numArgs; ++i)
+            handleToken(lexer.next());
         vm.call(index);
     }
 
