@@ -64,6 +64,7 @@ public class Parser
                 index = i;
                 break;
             }
+        handleToken(lexer.next());
         vm.call(index);
     }
 

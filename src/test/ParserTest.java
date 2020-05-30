@@ -301,7 +301,7 @@ public class ParserTest
         cg = new CodeGen(new String[] {"in", "out"});
         p = new Parser(l, cg);
         p.parse();
-        assertEquals(new ByteCode(ByteCode.Type.CALL, 1),cg.generate()[0]);
-        assertEquals(new ByteCode(ByteCode.Type.CALL, 0),cg.generate()[1]);
+        assertEquals(new ByteCode(ByteCode.Type.CALL, 0),cg.generate()[0]);
+        assertEquals(new ByteCode(ByteCode.Type.CALL, 1),cg.generate()[1]);
     }
 }
