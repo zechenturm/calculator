@@ -76,7 +76,5 @@ public class ByteCodeWriterTest
                         (byte) ByteCode.Type.LOAD_VALUE.ordinal(), 0, 0, 0, 2,
                         (byte) ByteCode.Type.ADD.ordinal()
                 });
-
-
     }
 }
