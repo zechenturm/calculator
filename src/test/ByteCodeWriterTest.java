@@ -36,5 +36,13 @@ public class ByteCodeWriterTest
         testSingle(new ByteCode(ByteCode.Type.LOAD, 1), new byte[]{(byte) ByteCode.Type.LOAD.ordinal(), 0, 0, 0, 1});
         testSingle(new ByteCode(ByteCode.Type.LOAD, 256), new byte[]{(byte) ByteCode.Type.LOAD.ordinal(), 0, 0, 1, 0});
         testSingle(new ByteCode(ByteCode.Type.LOAD, 257), new byte[]{(byte) ByteCode.Type.LOAD.ordinal(), 0, 0, 1, 1});
+
+        testSingle(new ByteCode(ByteCode.Type.LOAD_VALUE, 257), new byte[]{(byte) ByteCode.Type.LOAD_VALUE.ordinal(), 0, 0, 1, 1});
+        testSingle(new ByteCode(ByteCode.Type.STORE, 256), new byte[]{(byte) ByteCode.Type.STORE.ordinal(), 0, 0, 1, 0});
+
+        testSingle(new ByteCode(ByteCode.Type.LABEL, 0), new byte[0]);
+
+        testSingle(new ByteCode(ByteCode.Type.CALL, 65540), new byte[]{(byte) ByteCode.Type.CALL.ordinal(), 0, 1, 0, 4});
+
     }
 }

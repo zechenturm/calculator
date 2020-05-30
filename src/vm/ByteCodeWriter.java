@@ -16,6 +16,8 @@ public class ByteCodeWriter
             case DIV:
                 bytes = new byte[1];
                 break;
+            case LABEL:
+                return new byte[0];
             default:
                 bytes = new byte[5];
                 var data = ByteBuffer.allocate(4).putInt(code.data).array();
