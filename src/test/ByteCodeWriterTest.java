@@ -24,6 +24,15 @@ public class ByteCodeWriterTest
             assertEquals(bytes[i], b[i]);
     }
 
+    private void testMultiple(ByteCode[] code, byte[] bytes)
+    {
+        var w = new ByteCodeWriter();
+        byte[] b = w.convert(code);
+        assertEquals(bytes.length, b.length);
+        for (int i = 0; i < bytes.length; ++i)
+            assertEquals(bytes[i], b[i]);
+    }
+
     @Test
     public void testSingleCode()
     {
@@ -43,6 +52,31 @@ public class ByteCodeWriterTest
         testSingle(new ByteCode(ByteCode.Type.LABEL, 0), new byte[0]);
 
         testSingle(new ByteCode(ByteCode.Type.CALL, 65540), new byte[]{(byte) ByteCode.Type.CALL.ordinal(), 0, 1, 0, 4});
+
+    }
+
+    @Test
+    public void testMultipleCodes()
+    {
+        testMultiple(new ByteCode[]{new ByteCode(ByteCode.Type.ADD)}, new byte[]{(byte) ByteCode.Type.ADD.ordinal()});
+
+        testMultiple(new ByteCode[]{
+                new ByteCode(ByteCode.Type.ADD),
+                new ByteCode(ByteCode.Type.SUB)},
+                new byte[]{(byte) ByteCode.Type.ADD.ordinal(),
+                           (byte) ByteCode.Type.SUB.ordinal()
+                });
+
+        testMultiple(new ByteCode[]{
+                        new ByteCode(ByteCode.Type.LOAD_VALUE, 1),
+                        new ByteCode(ByteCode.Type.LOAD_VALUE, 2),
+                        new ByteCode(ByteCode.Type.ADD)},
+                new byte[]{
+                        (byte) ByteCode.Type.LOAD_VALUE.ordinal(), 0, 0, 0, 1,
+                        (byte) ByteCode.Type.LOAD_VALUE.ordinal(), 0, 0, 0, 2,
+                        (byte) ByteCode.Type.ADD.ordinal()
+                });
+
 
     }
 }

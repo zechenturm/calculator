@@ -1,5 +1,6 @@
 package vm;
 
+import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 
 public class ByteCodeWriter
@@ -26,5 +27,13 @@ public class ByteCodeWriter
 
         bytes[0] = (byte) code.type.ordinal();
         return bytes;
+    }
+
+    public byte[] convert(ByteCode[] code)
+    {
+        var buffer = new ByteArrayOutputStream();
+        for (var c : code)
+            buffer.writeBytes(convert(c));
+        return buffer.toByteArray();
     }
 }
