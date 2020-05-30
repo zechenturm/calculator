@@ -36,6 +36,7 @@ public class ByteCodeWriter
                 labels.put(code.data, buffer.position());
                 return new byte[0];
             case JUMP:
+            case BR_IF_0:
                 bytes = new byte[5];
                 var data = ByteBuffer.allocate(4).putInt(code.data).array();
                 System.arraycopy(data, 0, bytes, 1, 4);

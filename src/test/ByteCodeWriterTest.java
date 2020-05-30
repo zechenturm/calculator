@@ -109,5 +109,16 @@ public class ByteCodeWriterTest
                         (byte) ByteCode.Type.LOAD_VALUE.ordinal(), 0, 0, 0, 3,
                         (byte) ByteCode.Type.ADD.ordinal(),
                 });
+
+        testMultiple(new ByteCode[]{
+                        new ByteCode(ByteCode.Type.BR_IF_0, 0),
+                        new ByteCode(ByteCode.Type.LOAD_VALUE, 3),
+                        new ByteCode(ByteCode.Type.LABEL, 0),
+                        new ByteCode(ByteCode.Type.ADD)},
+                new byte[]{
+                        (byte) ByteCode.Type.BR_IF_0.ordinal(), 0, 0, 0, 10,
+                        (byte) ByteCode.Type.LOAD_VALUE.ordinal(), 0, 0, 0, 3,
+                        (byte) ByteCode.Type.ADD.ordinal(),
+                });
     }
 }
