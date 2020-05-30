@@ -4,7 +4,7 @@ import parser.FunctionSignature;
 
 import java.util.ArrayList;
 
-public class CodeGen implements VM
+public class CodeGen implements AbstractMachine
 {
     private ArrayList<ByteCode> code = new ArrayList<>();
     private final FunctionSignature[] builtins;

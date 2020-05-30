@@ -2,7 +2,7 @@ package vm;
 
 import parser.FunctionSignature;
 
-public interface VM {
+public interface AbstractMachine {
     void add();
     void subtract();
     void multiply();

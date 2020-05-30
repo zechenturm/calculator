@@ -2,13 +2,13 @@ package parser;
 
 import lexer.Lexer;
 import token.*;
-import vm.VM;
+import vm.AbstractMachine;
 
 import java.util.ArrayList;
 
 public class Parser
 {
-    private final VM vm;
+    private final AbstractMachine vm;
     private final Lexer lexer;
 
     ArrayList<String> symbolTable = new ArrayList<>();
@@ -16,7 +16,7 @@ public class Parser
     private int labelIndex = 0;
     private final FunctionSignature[] builtins;
 
-    public Parser(Lexer l, VM vm)
+    public Parser(Lexer l, AbstractMachine vm)
     {
         lexer = l;
         this.vm = vm;

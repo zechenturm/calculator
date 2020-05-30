@@ -5,7 +5,7 @@ import parser.FunctionSignature;
 import java.util.ArrayList;
 import java.util.Stack;
 
-public class Interpreter implements VM
+public class Interpreter implements AbstractMachine
 {
         Stack<Integer> stack = new Stack<>();
         ArrayList<Integer> vars = new ArrayList<>();
