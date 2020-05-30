@@ -288,20 +288,32 @@ public class ParserTest
         assertEquals(12, p.eval());
     }
 
+    private void testByteCode(String input, String[] builtins, ByteCode[] expectedCode)
+    {
+        var l = new Lexer(input);
+        var cg = new CodeGen(builtins);
+        var p = new Parser(l, cg);
+
+        p.parse();
+
+        for (int i = 0; i < expectedCode.length; ++i)
+            assertEquals(expectedCode[i],cg.generate()[i]);
+    }
+
     @Test
     public void testBuiltinFunctions()
     {
-        var l = new Lexer(":in");
-        var cg = new CodeGen(new String[] {"in"});
-        var p = new Parser(l, cg);
-        p.parse();
-        assertEquals(new ByteCode(ByteCode.Type.CALL, 0),cg.generate()[0]);
+        testByteCode(":in",
+                new String[]{"in"},
+                new ByteCode[]{
+                        new ByteCode(ByteCode.Type.CALL, 0)
+                });
 
-        l = new Lexer(":out :in");
-        cg = new CodeGen(new String[] {"in", "out"});
-        p = new Parser(l, cg);
-        p.parse();
-        assertEquals(new ByteCode(ByteCode.Type.CALL, 0),cg.generate()[0]);
-        assertEquals(new ByteCode(ByteCode.Type.CALL, 1),cg.generate()[1]);
+        testByteCode(":out :in",
+                new String[]{"in", "out"},
+                new ByteCode[]{
+                        new ByteCode(ByteCode.Type.CALL, 0),
+                        new ByteCode(ByteCode.Type.CALL, 1)
+                });
     }
 }
