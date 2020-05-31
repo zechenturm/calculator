@@ -1,8 +1,11 @@
 package test;
 
+import lexer.Lexer;
 import org.junit.jupiter.api.Test;
+import parser.Parser;
 import vm.ByteCode;
 import vm.ByteCodeWriter;
+import vm.CodeGen;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -120,5 +123,30 @@ public class ByteCodeWriterTest
                         (byte) ByteCode.Type.LOAD_VALUE.ordinal(), 0, 0, 0, 3,
                         (byte) ByteCode.Type.ADD.ordinal(),
                 });
+    }
+
+    private ByteCodeWriter createWriter(String input)
+    {
+        var l = new Lexer(input);
+        var g = new CodeGen();
+        var p = new Parser(l, g);
+        p.parse();
+        return new ByteCodeWriter(g.generate());
+    }
+
+    @Test
+    public void testRamSize()
+    {
+        var w = createWriter("");
+        w.convert();
+        assertEquals(0, w.getRamSize());
+
+        w = createWriter("x = 0;");
+        w.convert();
+        assertEquals(1, w.getRamSize());
+
+        w = createWriter("x = 0; y = 0;");
+        w.convert();
+        assertEquals(2, w.getRamSize());
     }
 }

@@ -12,6 +12,7 @@ public class ByteCodeWriter
     ArrayList<Integer> jumps = new ArrayList<>();
     ByteBuffer buffer;
     ByteCode[] code;
+    int ramSize = 0;
 
     public ByteCodeWriter(ByteCode[] code)
     {
@@ -42,6 +43,8 @@ public class ByteCodeWriter
                 System.arraycopy(data, 0, bytes, 1, 4);
                 jumps.add(buffer.position()+1);
                 break;
+            case STORE:
+                ramSize = code.data+1;
             default:
                 bytes = new byte[5];
                 data = ByteBuffer.allocate(4).putInt(code.data).array();
@@ -86,5 +89,10 @@ public class ByteCodeWriter
             buffer.put(convert(c));
         fixJumps();
         return buffer.array();
+    }
+
+    public int getRamSize()
+    {
+        return ramSize;
     }
 }
