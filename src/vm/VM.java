@@ -6,12 +6,14 @@ import java.util.Stack;
 public class VM
 {
     private final byte LOAD_VALUE = 0;
+    private final byte LOAD = 1;
+    private final byte STORE = 2;
     private final byte ADD = 3;
     private static final byte SUB = 4;
     private final byte MUL = 5;
     private static final byte DIV = 6;
 
-    private int returnCode = 0;
+    private int[] variables = new int[2];
     private ByteBuffer codeBuffer;
     private Stack<Integer> stack = new Stack<>();
 
@@ -29,7 +31,7 @@ public class VM
             {
                 case LOAD_VALUE:
                     var value = codeBuffer.getInt(codeBuffer.position());
-                    codeBuffer.position(codeBuffer.position() + 4);
+                    advance(4);
                     stack.push(value);
                     break;
                 case ADD:
@@ -52,6 +54,17 @@ public class VM
                     var div2 = stack.pop();
                     stack.push(div2 / div1);
                     break;
+                case STORE:
+                    var index = codeBuffer.getInt(codeBuffer.position());
+                    advance(4);
+                    variables[index] = stack.pop();
+                    break;
+                case LOAD:
+                    index = codeBuffer.getInt(codeBuffer.position());
+                    advance(4);
+                    stack.push(variables[index]);
+                    break;
+
             }
         }
 
@@ -59,5 +72,10 @@ public class VM
             return 0;
 
         return stack.pop();
+    }
+
+    private void advance(int num)
+    {
+        codeBuffer.position(codeBuffer.position() + num);
     }
 }

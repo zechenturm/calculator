@@ -48,4 +48,13 @@ public class VMTest
 
         testScript("6/3", 2);
     }
+
+    @Test
+    public void testVariables()
+    {
+        testScript("x = 1; x+1", 2);
+        testScript("x = 1; y = 2; x", 1);
+
+
+    }
 }
