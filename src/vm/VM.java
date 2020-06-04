@@ -22,7 +22,6 @@ public class VM
         while (codeBuffer.remaining() > 0)
         {
             byte currentCode = codeBuffer.get();
-            System.out.println(codeBuffer.position() + ": " + (int)currentCode);
             switch (currentCode)
             {
                 case LOAD_VALUE:
