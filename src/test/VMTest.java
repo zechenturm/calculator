@@ -20,6 +20,19 @@ public class VMTest
         assertEquals(0, ret);
     }
 
+    private void testScript(String script, int result)
+    {
+        var l = new Lexer(script);
+        var g = new CodeGen();
+        var p = new Parser(l, g);
+
+        p.parse();
+
+        var w = new ByteCodeWriter(g.generate());
+        var v = new VM(w.convert());
+        assertEquals(result, v.execute());
+    }
+
     @Test
     public void testSimplePrograms()
     {
@@ -27,18 +40,6 @@ public class VMTest
         var v = new VM(w.convert());
         assertEquals(1, v.execute());
 
-        w = new ByteCodeWriter(new ByteCode[]{new ByteCode(ByteCode.Type.LOAD_VALUE, 10)});
-        v = new VM(w.convert());
-        assertEquals(10, v.execute());
-
-        var l = new Lexer("1+2");
-        var g = new CodeGen();
-        var p = new Parser(l, g);
-
-        p.parse();
-
-        w = new ByteCodeWriter(g.generate());
-        v = new VM(w.convert());
-        assertEquals(3, v.execute());
+        testScript("1+2", 3);
     }
 }
