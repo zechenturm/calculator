@@ -41,11 +41,8 @@ public class VMTest
         assertEquals(1, v.execute());
 
         testScript("1+2", 3);
-
         testScript("1-2", -1);
-
         testScript("2*3", 6);
-
         testScript("6/3", 2);
     }
 
@@ -54,7 +51,5 @@ public class VMTest
     {
         testScript("x = 1; x+1", 2);
         testScript("x = 1; y = 2; x", 1);
-
-
     }
 }
