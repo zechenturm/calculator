@@ -7,6 +7,7 @@ public class VM
 {
     private final byte LOAD_VALUE = 0;
     private final byte ADD = 3;
+    private final byte MUL = 5;
 
     private int returnCode = 0;
     private ByteBuffer codeBuffer;
@@ -33,6 +34,11 @@ public class VM
                     var add1 = stack.pop();
                     var add2 = stack.pop();
                     stack.push(add1 + add2);
+                    break;
+                case MUL:
+                    var mul1 = stack.pop();
+                    var mul2 = stack.pop();
+                    stack.push(mul1 * mul2);
             }
         }
 
