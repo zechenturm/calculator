@@ -42,6 +42,10 @@ public class VMTest
 
         testScript("1+2", 3);
 
+        testScript("1-2", -1);
+
         testScript("2*3", 6);
+
+        testScript("6/3", 2);
     }
 }
