@@ -2,11 +2,15 @@ package test;
 
 import lexer.Lexer;
 import org.junit.jupiter.api.Test;
+import parser.FunctionSignature;
 import parser.Parser;
 import vm.ByteCode;
 import vm.ByteCodeWriter;
 import vm.CodeGen;
 import vm.VM;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -62,5 +66,30 @@ public class VMTest
         testScript("5 + if 1 2", 7);
         testScript("5 + if 1 2 else 3", 7);
         testScript("5 + if 0 2 else 3", 8);
+    }
+
+    private void testScript(String script, int result, InputStream in, FunctionSignature[] builtins)
+    {
+        var l = new Lexer(script);
+        var g = new CodeGen(builtins);
+        var p = new Parser(l, g);
+
+        p.parse();
+
+        var code = g.generate();
+        var w = new ByteCodeWriter(code);
+        var bytes = w.convert();
+        var v = new VM(bytes, in);
+
+        assertEquals(result, v.execute());
+    }
+
+    @Test
+    public void testBuiltins()
+    {
+        var in = new ByteArrayInputStream("100".getBytes());
+        testScript(":in", 100, in, new FunctionSignature[]{
+                new FunctionSignature("in", 0)
+        });
     }
 }

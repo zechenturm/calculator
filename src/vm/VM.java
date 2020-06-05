@@ -1,5 +1,7 @@
 package vm;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.Stack;
 
@@ -14,14 +16,23 @@ public class VM
     private static final byte DIV = 7;
     private static final byte JUMP = 9;
     private static final byte BR_IF_0 = 10;
+    private static final byte CALL = 11;
 
     private int[] variables = new int[2];
     private ByteBuffer codeBuffer;
     private Stack<Integer> stack = new Stack<>();
 
-    public VM(byte[] code)
+    private InputStream in;
+
+    public VM(byte[] code, InputStream in)
     {
         codeBuffer = ByteBuffer.allocate(code.length).put(code);
+        this.in = in;
+    }
+
+    public VM(byte[] code)
+    {
+        this(code, null);
     }
 
     public int execute() {
@@ -76,6 +87,23 @@ public class VM
                 case JUMP:
                         var addr = codeBuffer.getInt(codeBuffer.position());
                         codeBuffer.position(addr);
+                    break;
+                case CALL:
+                    index = codeBuffer.getInt(codeBuffer.position());
+                    advance(4);
+                    if (index == 0) // :in
+                    {
+                        try
+                        {
+                            var bytes = in.readAllBytes();
+                            value = Integer.parseInt(new String(bytes));
+                            stack.push(value);
+                        }
+                        catch (IOException e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
                     break;
 
             }
