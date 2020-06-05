@@ -13,9 +13,9 @@ Planned features:
 - [x] multiline programs
 - [x] variable declarations
 - [x] if-else expression
-- [ ] builtin functions
-- [ ] byte code compiler
-- [ ] VM to run byte code
-- [ ] CFGs generation
+- [x] builtin functions
+- [x] byte code compiler
+- [x] VM to run byte code
+- [ ] CFG generation
 - [ ] SSA implementation
 - [ ] SSA optimizations
