@@ -63,5 +63,7 @@ public class VMTest
     public void testIf()
     {
         testScript("5 + if 1 2", 7);
+        testScript("5 + if 1 2 else 3", 7);
+        testScript("5 + if 0 2 else 3", 8);
     }
 }

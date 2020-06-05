@@ -12,6 +12,7 @@ public class VM
     private static final byte SUB = 5;
     private final byte MUL = 6;
     private static final byte DIV = 7;
+    private static final byte JUMP = 9;
     private static final byte BR_IF_0 = 10;
 
     private int[] variables = new int[2];
@@ -71,6 +72,10 @@ public class VM
                         var addr = codeBuffer.getInt(codeBuffer.position());
                         codeBuffer.position(addr);
                     }
+                    break;
+                case JUMP:
+                        var addr = codeBuffer.getInt(codeBuffer.position());
+                        codeBuffer.position(addr);
                     break;
 
             }
