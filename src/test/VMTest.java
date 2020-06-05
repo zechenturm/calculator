@@ -29,13 +29,10 @@ public class VMTest
         p.parse();
 
         var code = g.generate();
-        for (var c : code)
-            System.out.println(c);
         var w = new ByteCodeWriter(code);
         var bytes = w.convert();
-        for (var c : bytes)
-            System.out.println(c);
         var v = new VM(bytes);
+
         assertEquals(result, v.execute());
     }
 
