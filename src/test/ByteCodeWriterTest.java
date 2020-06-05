@@ -52,7 +52,7 @@ public class ByteCodeWriterTest
         testSingle(new ByteCode(ByteCode.Type.LOAD_VALUE, 257), new byte[]{(byte) ByteCode.Type.LOAD_VALUE.ordinal(), 0, 0, 1, 1});
         testSingle(new ByteCode(ByteCode.Type.STORE, 256), new byte[]{(byte) ByteCode.Type.STORE.ordinal(), 0, 0, 1, 0});
 
-        testSingle(new ByteCode(ByteCode.Type.LABEL, 0), new byte[0]);
+        testSingle(new ByteCode(ByteCode.Type.LABEL, 0), new byte[1]);
 
         testSingle(new ByteCode(ByteCode.Type.CALL, 65540), new byte[]{(byte) ByteCode.Type.CALL.ordinal(), 0, 1, 0, 4});
 
@@ -132,6 +132,18 @@ public class ByteCodeWriterTest
         var p = new Parser(l, g);
         p.parse();
         return new ByteCodeWriter(g.generate());
+    }
+
+    @Test
+    public void testJumpToEndOfProgram()
+    {
+       testMultiple(new ByteCode[]{
+               new ByteCode(ByteCode.Type.JUMP, 0),
+               new ByteCode(ByteCode.Type.LABEL, 0)
+       }, new byte[]{
+               (byte) ByteCode.Type.JUMP.ordinal(), 0, 0, 0, 5,
+               (byte) ByteCode.Type.NOP.ordinal()
+       });
     }
 
     @Test

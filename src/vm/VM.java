@@ -5,13 +5,13 @@ import java.util.Stack;
 
 public class VM
 {
-    private final byte LOAD_VALUE = 0;
-    private final byte LOAD = 1;
-    private final byte STORE = 2;
-    private final byte ADD = 3;
-    private static final byte SUB = 4;
-    private final byte MUL = 5;
-    private static final byte DIV = 6;
+    private final byte LOAD_VALUE = 1;
+    private final byte LOAD = 2;
+    private final byte STORE = 3;
+    private final byte ADD = 4;
+    private static final byte SUB = 5;
+    private final byte MUL = 6;
+    private static final byte DIV = 7;
 
     private int[] variables = new int[2];
     private ByteBuffer codeBuffer;

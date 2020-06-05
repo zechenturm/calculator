@@ -4,6 +4,7 @@ public class ByteCode
 {
     public enum Type
     {
+        NOP,
         LOAD_VALUE,
         LOAD,
         STORE,
