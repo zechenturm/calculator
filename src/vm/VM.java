@@ -12,6 +12,7 @@ public class VM
     private static final byte SUB = 5;
     private final byte MUL = 6;
     private static final byte DIV = 7;
+    private static final byte BR_IF_0 = 10;
 
     private int[] variables = new int[2];
     private ByteBuffer codeBuffer;
@@ -63,6 +64,13 @@ public class VM
                     index = codeBuffer.getInt(codeBuffer.position());
                     advance(4);
                     stack.push(variables[index]);
+                    break;
+                case BR_IF_0:
+                    if (stack.pop() == 0)
+                    {
+                        var addr = codeBuffer.getInt(codeBuffer.position());
+                        codeBuffer.position(addr);
+                    }
                     break;
 
             }

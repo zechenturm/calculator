@@ -28,8 +28,14 @@ public class VMTest
 
         p.parse();
 
-        var w = new ByteCodeWriter(g.generate());
-        var v = new VM(w.convert());
+        var code = g.generate();
+        for (var c : code)
+            System.out.println(c);
+        var w = new ByteCodeWriter(code);
+        var bytes = w.convert();
+        for (var c : bytes)
+            System.out.println(c);
+        var v = new VM(bytes);
         assertEquals(result, v.execute());
     }
 
@@ -51,5 +57,11 @@ public class VMTest
     {
         testScript("x = 1; x+1", 2);
         testScript("x = 1; y = 2; x", 1);
+    }
+
+    @Test
+    public void testIf()
+    {
+        testScript("5 + if 1 2", 7);
     }
 }
