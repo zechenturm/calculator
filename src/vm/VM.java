@@ -2,6 +2,7 @@ package vm;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.util.Stack;
 
@@ -23,16 +24,18 @@ public class VM
     private Stack<Integer> stack = new Stack<>();
 
     private InputStream in;
+    private OutputStream out;
 
-    public VM(byte[] code, InputStream in)
+    public VM(byte[] code, InputStream in, OutputStream out)
     {
         codeBuffer = ByteBuffer.allocate(code.length).put(code);
         this.in = in;
+        this.out = out;
     }
 
     public VM(byte[] code)
     {
-        this(code, null);
+        this(code, null, null);
     }
 
     public int execute() {
@@ -91,19 +94,7 @@ public class VM
                 case CALL:
                     index = codeBuffer.getInt(codeBuffer.position());
                     advance(4);
-                    if (index == 0) // :in
-                    {
-                        try
-                        {
-                            var bytes = in.readAllBytes();
-                            value = Integer.parseInt(new String(bytes));
-                            stack.push(value);
-                        }
-                        catch (IOException e)
-                        {
-                            e.printStackTrace();
-                        }
-                    }
+                    handleBuiltin(index);
                     break;
 
             }
@@ -113,6 +104,30 @@ public class VM
             return 0;
 
         return stack.pop();
+    }
+
+    private void handleBuiltin(int index) {
+        int value;
+
+        try
+        {
+            switch (index)
+            {
+                case 0: // in
+                    var bytes = in.readAllBytes();
+                    value = Integer.parseInt(new String(bytes));
+                    stack.push(value);
+                    break;
+                case 1:
+                    value = stack.pop();
+                    out.write(Integer.toString(value).getBytes());
+                    break;
+            }
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     private void advance(int num)

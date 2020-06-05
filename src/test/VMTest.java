@@ -10,7 +10,9 @@ import vm.CodeGen;
 import vm.VM;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -68,7 +70,7 @@ public class VMTest
         testScript("5 + if 0 2 else 3", 8);
     }
 
-    private void testScript(String script, int result, InputStream in, FunctionSignature[] builtins)
+    private void testScript(String script, int result, InputStream in, OutputStream out, FunctionSignature[] builtins)
     {
         var l = new Lexer(script);
         var g = new CodeGen(builtins);
@@ -79,7 +81,7 @@ public class VMTest
         var code = g.generate();
         var w = new ByteCodeWriter(code);
         var bytes = w.convert();
-        var v = new VM(bytes, in);
+        var v = new VM(bytes, in, out);
 
         assertEquals(result, v.execute());
     }
@@ -88,8 +90,17 @@ public class VMTest
     public void testBuiltins()
     {
         var in = new ByteArrayInputStream("100".getBytes());
-        testScript(":in", 100, in, new FunctionSignature[]{
+        testScript(":in", 100, in, null, new FunctionSignature[]{
                 new FunctionSignature("in", 0)
         });
+
+        var out = new ByteArrayOutputStream();
+        testScript(":out 100", 0, null, out, new FunctionSignature[]{
+                new FunctionSignature("in", 0),
+                new FunctionSignature("out", 1)
+        });
+
+        var output = out.toString();
+        assertEquals("100", output);
     }
 }
