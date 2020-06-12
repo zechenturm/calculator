@@ -65,14 +65,21 @@ public class CodeGenTest
     @Test
     public void testJumps()
     {
-        testSingle(cg -> cg.label(0), new ByteCode(ByteCode.Type.LABEL, 0));
-        testSingle(cg -> cg.label(1), new ByteCode(ByteCode.Type.LABEL, 1));
+        testMultiple(cg ->
+            {
+                cg.label(0);
+                cg.jump(0);
+            },
+            new ByteCode(ByteCode.Type.JUMP, 0)
+        );
 
-        testSingle(cg -> cg.jump(0), new ByteCode(ByteCode.Type.JUMP, 0));
-        testSingle(cg -> cg.jump(1), new ByteCode(ByteCode.Type.JUMP, 1));
-
-        testSingle(cg -> cg.branchIfZero(0), new ByteCode(ByteCode.Type.BR_IF_0, 0));
-        testSingle(cg -> cg.branchIfZero(1), new ByteCode(ByteCode.Type.BR_IF_0, 1));
+        testMultiple(cg ->
+                {
+                    cg.label(1);
+                    cg.branchIfZero(1);
+                },
+                new ByteCode(ByteCode.Type.BR_IF_0, 0)
+        );
 
     }
 

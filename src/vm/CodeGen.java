@@ -3,10 +3,12 @@ package vm;
 import parser.FunctionSignature;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CodeGen implements AbstractMachine
 {
     private ArrayList<ByteCode> code = new ArrayList<>();
+    private HashMap<Integer, Integer> labels = new HashMap<>();
     private final FunctionSignature[] builtins;
 
     public CodeGen(FunctionSignature[] builtinFunctions)
@@ -41,7 +43,7 @@ public class CodeGen implements AbstractMachine
 
     @Override
     public void label(int index) {
-        code.add(new ByteCode(ByteCode.Type.LABEL, index));
+        labels.put(index, code.size());
     }
 
     @Override
@@ -79,8 +81,19 @@ public class CodeGen implements AbstractMachine
         return builtins;
     }
 
+    private static boolean isJump(ByteCode code)
+    {
+        return code.type == ByteCode.Type.JUMP || code.type == ByteCode.Type.BR_IF_0;
+    }
+
+    private void fixAddresses()
+    {
+        code.stream().filter(CodeGen::isJump).forEach( bc -> bc.data = labels.get(bc.data) );
+    }
+
     public ByteCode[] generate()
     {
+        fixAddresses();
         var a = new ByteCode[code.size()];
         return code.toArray(a);
     }
