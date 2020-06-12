@@ -91,9 +91,19 @@ public class CodeGen implements AbstractMachine
         code.stream().filter(CodeGen::isJump).forEach( bc -> bc.data = labels.get(bc.data) );
     }
 
+    private void addNOPIfJumpingOutOfBounds()
+    {
+        labels.forEach( (label, address) ->
+        {
+            if (address == code.size())
+                code.add(new ByteCode(ByteCode.Type.NOP));
+        });
+    }
+
     public ByteCode[] generate()
     {
         fixAddresses();
+        addNOPIfJumpingOutOfBounds();
         var a = new ByteCode[code.size()];
         return code.toArray(a);
     }

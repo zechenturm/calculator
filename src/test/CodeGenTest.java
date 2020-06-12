@@ -81,6 +81,17 @@ public class CodeGenTest
                 new ByteCode(ByteCode.Type.BR_IF_0, 0)
         );
 
+        testMultiple(cg ->
+                {
+                    cg.branchIfZero(1);
+                    cg.loadValue(0);
+                    cg.label(1);
+                },
+                new ByteCode(ByteCode.Type.BR_IF_0, 2),
+                new ByteCode(ByteCode.Type.LOAD_VALUE, 0),
+                new ByteCode(ByteCode.Type.NOP)
+        );
+
     }
 
     @Test
