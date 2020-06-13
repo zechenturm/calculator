@@ -11,6 +11,9 @@ public class CodeGen implements AbstractMachine
     private HashMap<Integer, Integer> labels = new HashMap<>();
     private final FunctionSignature[] builtins;
 
+    private int stackTop = 0;
+    private int stackSize = 0;
+
     public CodeGen(FunctionSignature[] builtinFunctions)
     {
         builtins = builtinFunctions;
@@ -23,21 +26,27 @@ public class CodeGen implements AbstractMachine
 
     public void loadValue(int value)
     {
+        calcStackSize(1);
         code.add(new ByteCode(ByteCode.Type.LOAD_VALUE, value));
     }
 
     @Override
-    public void load(int index) {
+    public void load(int index)
+    {
+        calcStackSize(1);
         code.add(new ByteCode(ByteCode.Type.LOAD, index));
     }
 
     @Override
     public void store(int index) {
+        calcStackSize(-1);
         code.add(new ByteCode(ByteCode.Type.STORE, index));
     }
 
     @Override
-    public void branchIfZero(int label) {
+    public void branchIfZero(int label)
+    {
+        calcStackSize(-1);
         code.add(new ByteCode(ByteCode.Type.BR_IF_0, label));
     }
 
@@ -53,26 +62,32 @@ public class CodeGen implements AbstractMachine
 
     @Override
     public void call(int index) {
+        calcStackSize(1 - builtins[index].numArgs);
         code.add(new ByteCode(ByteCode.Type.CALL, index));
     }
 
     public void add()
     {
+        calcStackSize(-2);
         code.add(new ByteCode(ByteCode.Type.ADD, 0));
     }
 
     @Override
-    public void subtract() {
+    public void subtract()
+    {
+        calcStackSize(-2);
         code.add(new ByteCode(ByteCode.Type.SUB, 0));
     }
 
     public void multiply()
     {
+        calcStackSize(-2);
         code.add(new ByteCode(ByteCode.Type.MUL, 0));
     }
 
     public void divide()
     {
+        calcStackSize(-2);
         code.add(new ByteCode(ByteCode.Type.DIV, 0));
     }
 
@@ -106,5 +121,15 @@ public class CodeGen implements AbstractMachine
         addNOPIfJumpingOutOfBounds();
         var a = new ByteCode[code.size()];
         return code.toArray(a);
+    }
+
+    public int getStackSize() {
+        return stackSize;
+    }
+
+    private void calcStackSize(int change)
+    {
+        stackTop += change;
+        stackSize = Math.max(stackSize, stackTop);
     }
 }

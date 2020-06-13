@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import parser.FunctionSignature;
 import parser.Parser;
 import vm.ByteCode;
 import vm.CodeGen;
@@ -117,5 +118,60 @@ public class CodeGenTest
                 new ByteCode(ByteCode.Type.MUL),
                 new ByteCode(ByteCode.Type.ADD)
         );
+    }
+
+    private CodeGen createCG(String input)
+    {
+        var cg = new CodeGen(new FunctionSignature[]{
+                new FunctionSignature("in", 0),
+                new FunctionSignature("out", 1)
+
+        });
+        var p = new Parser(new Lexer(input), cg);
+        p.parse();
+        cg.generate();
+        return cg;
+    }
+
+    @Test
+    public void testStackSize()
+    {
+        var cg = createCG("");
+        assertEquals(0, cg.getStackSize());
+
+        cg = createCG("2");
+        assertEquals(1, cg.getStackSize());
+
+
+
+        cg = createCG("1 + 2");
+        assertEquals(2, cg.getStackSize());
+
+        cg = createCG("1 + 2 + 3");
+        assertEquals(2, cg.getStackSize());
+
+        cg = createCG("1 - 2 - 3");
+        assertEquals(2, cg.getStackSize());
+
+        cg = createCG("1 + 2 * 3 + 2");
+        assertEquals(3, cg.getStackSize());
+
+        cg = createCG("1 + 2 / 3 + 2");
+        assertEquals(3, cg.getStackSize());
+
+        cg = createCG("x = 2; 3");
+        assertEquals(1, cg.getStackSize());
+
+        cg = createCG("x = 2; x + 3");
+        assertEquals(2, cg.getStackSize());
+
+        cg = createCG("if 1 2");
+        assertEquals(1, cg.getStackSize());
+
+        cg = createCG(":in");
+        assertEquals(1, cg.getStackSize());
+
+        cg = createCG(":out 1");
+        assertEquals(1, cg.getStackSize());
     }
 }
