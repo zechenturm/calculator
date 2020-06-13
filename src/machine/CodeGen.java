@@ -96,14 +96,9 @@ public class CodeGen implements AbstractMachine
         return builtins;
     }
 
-    private static boolean isJump(ByteCode code)
-    {
-        return code.type == ByteCode.Type.JUMP || code.type == ByteCode.Type.BR_IF_0;
-    }
-
     private void fixAddresses()
     {
-        code.stream().filter(CodeGen::isJump).forEach( bc -> bc.data = labels.get(bc.data) );
+        code.stream().filter(ByteCode::isJump).forEach(bc -> bc.data = labels.get(bc.data) );
     }
 
     private void addNOPIfJumpingOutOfBounds()

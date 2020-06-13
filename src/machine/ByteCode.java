@@ -31,6 +31,11 @@ public class ByteCode
         this(t, 0);
     }
 
+    public boolean isJump()
+    {
+        return type == ByteCode.Type.JUMP || type == ByteCode.Type.BR_IF_0;
+    }
+
     @Override
     public boolean equals(Object other)
     {
