@@ -15,9 +15,9 @@ public class VM
     private static final byte SUB = 5;
     private final byte MUL = 6;
     private static final byte DIV = 7;
-    private static final byte JUMP = 9;
-    private static final byte BR_IF_0 = 10;
-    private static final byte CALL = 11;
+    private static final byte JUMP = 8;
+    private static final byte BR_IF_0 = 9;
+    private static final byte CALL = 10;
 
     private int[] variables = new int[2];
     private ByteBuffer codeBuffer;

@@ -61,7 +61,6 @@ public class ByteCodeWriter
         return switch (code.type)
                 {
                     case NOP,ADD, SUB, MUL, DIV -> 1;
-                    case LABEL -> 0;
                     default -> 5;
                 };
     }
@@ -71,11 +70,6 @@ public class ByteCodeWriter
         int size = 0;
         for (var c : code)
             size += getCodeSize(c);
-
-        // check if last ByteCode is a label and insert an extra byte for NOP
-        // otherwise jumoing to this label is out of bounds
-        if ( code.length > 0 && code[code.length-1].type == ByteCode.Type.LABEL)
-            ++size;
         return size;
     }
 

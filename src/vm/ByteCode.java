@@ -12,7 +12,6 @@ public class ByteCode
         SUB,
         MUL,
         DIV,
-        LABEL,
         JUMP,
         BR_IF_0,
         CALL
