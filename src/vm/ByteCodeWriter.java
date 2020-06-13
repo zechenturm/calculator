@@ -10,6 +10,7 @@ public class ByteCodeWriter
 {
     HashMap<Integer, Integer> labels = new HashMap<>();
     ArrayList<Integer> jumps = new ArrayList<>();
+    ArrayList<Integer> adresses = new ArrayList<>();
     ByteBuffer buffer;
     ByteCode[] code;
     int ramSize = 0;
@@ -25,17 +26,17 @@ public class ByteCodeWriter
     {
         byte[] bytes;
 
+        adresses.add(buffer.position());
+
         switch (code.type)
         {
+            case NOP:
             case ADD:
             case SUB:
             case MUL:
             case DIV:
                 bytes = new byte[1];
                 break;
-            case LABEL:
-                labels.put(code.data, buffer.position());
-                return new byte[0];
             case JUMP:
             case BR_IF_0:
                 bytes = new byte[5];
@@ -59,7 +60,7 @@ public class ByteCodeWriter
     {
         return switch (code.type)
                 {
-                    case ADD, SUB, MUL, DIV -> 1;
+                    case NOP,ADD, SUB, MUL, DIV -> 1;
                     case LABEL -> 0;
                     default -> 5;
                 };
@@ -83,7 +84,7 @@ public class ByteCodeWriter
         for (var addr : jumps)
         {
             var label = buffer.getInt(addr);
-            var jumpAddr = labels.get(label);
+            var jumpAddr = adresses.get(label);
             buffer.putInt(addr, jumpAddr);
         }
     }

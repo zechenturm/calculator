@@ -52,8 +52,6 @@ public class ByteCodeWriterTest
         testSingle(new ByteCode(ByteCode.Type.LOAD_VALUE, 257), new byte[]{(byte) ByteCode.Type.LOAD_VALUE.ordinal(), 0, 0, 1, 1});
         testSingle(new ByteCode(ByteCode.Type.STORE, 256), new byte[]{(byte) ByteCode.Type.STORE.ordinal(), 0, 0, 1, 0});
 
-        testSingle(new ByteCode(ByteCode.Type.LABEL, 0), new byte[1]);
-
         testSingle(new ByteCode(ByteCode.Type.CALL, 65540), new byte[]{(byte) ByteCode.Type.CALL.ordinal(), 0, 1, 0, 4});
 
     }
@@ -85,27 +83,24 @@ public class ByteCodeWriterTest
     public void testJumps()
     {
         testMultiple(new ByteCode[]{
-                        new ByteCode(ByteCode.Type.LABEL, 0),
                         new ByteCode(ByteCode.Type.JUMP, 0)},
                 new byte[]{
                         (byte) ByteCode.Type.JUMP.ordinal(), 0, 0, 0, 0
                 });
 
         testMultiple(new ByteCode[]{
-                        new ByteCode(ByteCode.Type.LOAD_VALUE, 3),
-                        new ByteCode(ByteCode.Type.LABEL, 0),
+                        new ByteCode(ByteCode.Type.LOAD_VALUE, 2),
                         new ByteCode(ByteCode.Type.ADD),
-                        new ByteCode(ByteCode.Type.JUMP, 0)},
+                        new ByteCode(ByteCode.Type.JUMP, 1)},
                 new byte[]{
-                        (byte) ByteCode.Type.LOAD_VALUE.ordinal(), 0, 0, 0, 3,
+                        (byte) ByteCode.Type.LOAD_VALUE.ordinal(), 0, 0, 0, 2,
                         (byte) ByteCode.Type.ADD.ordinal(),
                         (byte) ByteCode.Type.JUMP.ordinal(), 0, 0, 0, 5
                 });
 
         testMultiple(new ByteCode[]{
-                        new ByteCode(ByteCode.Type.JUMP, 0),
+                        new ByteCode(ByteCode.Type.JUMP, 2),
                         new ByteCode(ByteCode.Type.LOAD_VALUE, 3),
-                        new ByteCode(ByteCode.Type.LABEL, 0),
                         new ByteCode(ByteCode.Type.ADD)},
                 new byte[]{
                         (byte) ByteCode.Type.JUMP.ordinal(), 0, 0, 0, 10,
@@ -114,9 +109,8 @@ public class ByteCodeWriterTest
                 });
 
         testMultiple(new ByteCode[]{
-                        new ByteCode(ByteCode.Type.BR_IF_0, 0),
+                        new ByteCode(ByteCode.Type.BR_IF_0, 2),
                         new ByteCode(ByteCode.Type.LOAD_VALUE, 3),
-                        new ByteCode(ByteCode.Type.LABEL, 0),
                         new ByteCode(ByteCode.Type.ADD)},
                 new byte[]{
                         (byte) ByteCode.Type.BR_IF_0.ordinal(), 0, 0, 0, 10,
@@ -138,8 +132,8 @@ public class ByteCodeWriterTest
     public void testJumpToEndOfProgram()
     {
        testMultiple(new ByteCode[]{
-               new ByteCode(ByteCode.Type.JUMP, 0),
-               new ByteCode(ByteCode.Type.LABEL, 0)
+               new ByteCode(ByteCode.Type.JUMP, 1),
+               new ByteCode(ByteCode.Type.NOP)
        }, new byte[]{
                (byte) ByteCode.Type.JUMP.ordinal(), 0, 0, 0, 5,
                (byte) ByteCode.Type.NOP.ordinal()
