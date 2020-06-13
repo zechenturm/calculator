@@ -1,9 +1,7 @@
-package vm;
+package machine;
 
-import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class ByteCodeWriter

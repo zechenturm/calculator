@@ -4,10 +4,10 @@ import lexer.Lexer;
 import org.junit.jupiter.api.Test;
 import parser.FunctionSignature;
 import parser.Parser;
-import vm.ByteCode;
-import vm.ByteCodeWriter;
-import vm.CodeGen;
-import vm.VM;
+import machine.ByteCode;
+import machine.ByteCodeWriter;
+import machine.CodeGen;
+import machine.VM;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

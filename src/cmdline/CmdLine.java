@@ -3,10 +3,9 @@ package cmdline;
 import lexer.Lexer;
 import parser.FunctionSignature;
 import parser.Parser;
-import vm.ByteCodeWriter;
-import vm.CodeGen;
-import vm.Interpreter;
-import vm.VM;
+import machine.ByteCodeWriter;
+import machine.CodeGen;
+import machine.VM;
 
 public class CmdLine {
     public static void main(String[] args)

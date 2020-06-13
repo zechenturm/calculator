@@ -2,7 +2,7 @@ package parser;
 
 import lexer.Lexer;
 import token.*;
-import vm.AbstractMachine;
+import machine.AbstractMachine;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package vm;
+package machine;
 
 import java.io.IOException;
 import java.io.InputStream;

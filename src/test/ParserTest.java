@@ -4,9 +4,9 @@ import lexer.Lexer;
 import org.junit.jupiter.api.Test;
 import parser.FunctionSignature;
 import parser.Parser;
-import vm.ByteCode;
-import vm.CodeGen;
-import vm.Interpreter;
+import machine.ByteCode;
+import machine.CodeGen;
+import machine.Interpreter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

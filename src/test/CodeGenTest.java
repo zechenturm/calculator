@@ -7,8 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import parser.FunctionSignature;
 import parser.Parser;
-import vm.ByteCode;
-import vm.CodeGen;
+import machine.ByteCode;
+import machine.CodeGen;
 
 public class CodeGenTest
 {

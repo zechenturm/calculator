@@ -3,9 +3,9 @@ package test;
 import lexer.Lexer;
 import org.junit.jupiter.api.Test;
 import parser.Parser;
-import vm.ByteCode;
-import vm.ByteCodeWriter;
-import vm.CodeGen;
+import machine.ByteCode;
+import machine.ByteCodeWriter;
+import machine.CodeGen;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

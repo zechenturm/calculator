@@ -1,4 +1,4 @@
-package vm;
+package machine;
 
 public class DebugCode extends Interpreter {
     @Override
