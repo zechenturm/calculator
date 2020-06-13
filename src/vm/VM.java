@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
+import java.util.Scanner;
 import java.util.Stack;
 
 public class VM
@@ -114,11 +115,10 @@ public class VM
             switch (index)
             {
                 case 0: // in
-                    var bytes = in.readAllBytes();
-                    value = Integer.parseInt(new String(bytes));
-                    stack.push(value);
+                    var s = new Scanner(in);
+                    stack.push(s.nextInt());
                     break;
-                case 1:
+                case 1: // out
                     value = stack.pop();
                     out.write(Integer.toString(value).getBytes());
                     break;
