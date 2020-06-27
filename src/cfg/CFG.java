@@ -42,12 +42,10 @@ public class CFG
                 splits.add(from);
                 splits.add(to);
                 if (code[from].isBranch())
-                {
                     edges.add(new Edge(from, from + 1));
-                    edges.add(new Edge(to, to + 1));
-                }
                 edges.add(new Edge(from, to + 1));
-
+                if (!code[to].isJump())
+                    edges.add(new Edge(to, to + 1));
             }
         }
     }
