@@ -74,4 +74,39 @@ public class CFGTest
         assertArrayEquals(secondBlock, second.codeBlock());
 
     }
+
+    @Test
+    void a_jump_skipping_instructions_produces_2_nodes_skipping_the_code_in_the_middle()
+    {
+        var bc = new ByteCode[]
+            {
+                new ByteCode(ByteCode.Type.NOP),
+                new ByteCode(ByteCode.Type.JUMP, 3),
+                new ByteCode(ByteCode.Type.LOAD_VALUE, 1),
+                new ByteCode(ByteCode.Type.LOAD_VALUE, 2)
+            };
+
+        var firstBlock = new ByteCode[]
+            {
+                new ByteCode(ByteCode.Type.NOP),
+                new ByteCode(ByteCode.Type.JUMP, 3),
+            };
+
+        var secondBlock = new ByteCode[]
+            {
+                new ByteCode(ByteCode.Type.LOAD_VALUE, 2)
+
+            };
+
+        var cfg = new CFG(bc);
+        var root = cfg.root();
+        assertNotNull(root);
+
+
+        var second = root.next;
+        assertNotNull(second);
+
+        assertArrayEquals(firstBlock, root.codeBlock());
+        assertArrayEquals(secondBlock, second.codeBlock());
+    }
 }
