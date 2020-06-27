@@ -35,19 +35,20 @@ public class CFG
     private void findSplits()
     {
         for (var from = 0; from < code.length; ++from)
-        {
             if (code[from].isJump())
-            {
-                var to = code[from].data - 1;
-                splits.add(from);
-                splits.add(to);
-                if (code[from].isBranch())
-                    edges.add(new Edge(from, from + 1));
-                edges.add(new Edge(from, to + 1));
-                if (!code[to].isJump())
-                    edges.add(new Edge(to, to + 1));
-            }
-        }
+                createSplit(from);
+    }
+
+    private void createSplit(int from)
+    {
+        var to = code[from].data - 1;
+        splits.add(from);
+        splits.add(to);
+        if (code[from].isBranch())
+            edges.add(new Edge(from, from + 1));
+        edges.add(new Edge(from, to + 1));
+        if (!code[to].isJump())
+            edges.add(new Edge(to, to + 1));
     }
 
     private void createNodes()
@@ -61,7 +62,6 @@ public class CFG
     private int createNode(int last, int current)
     {
         var size = current - last+1;
-//            System.out.println("cur: " +  current + " last: " + last + " size: " + size);
         var node = new CFGNode(new ByteCode[size]);
         System.arraycopy(code, last, node.codeBlock(), 0, size);
         node.lastByteCodeIndex = current;
@@ -73,16 +73,14 @@ public class CFG
     private CFGNode indexToNode(int index)
     {
         for(var node : nodes)
-        {
             if (node.lastByteCodeIndex >= index)
                 return node;
-        }
         return null;
     }
 
     private void linkNodes()
     {
-        for ( var edge : edges)
+        for (var edge : edges)
         {
             var from = indexToNode(edge.from);
             from.next.add(indexToNode(edge.to));
