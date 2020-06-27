@@ -67,7 +67,7 @@ public class CFGTest
         assertNotNull(root);
 
 
-        var second = root.next;
+        var second = root.next.get(0);
         assertNotNull(second);
 
         assertArrayEquals(firstBlock, root.codeBlock());
@@ -103,10 +103,54 @@ public class CFGTest
         assertNotNull(root);
 
 
-        var second = root.next;
+        var second = root.next.get(0);
         assertNotNull(second);
 
         assertArrayEquals(firstBlock, root.codeBlock());
         assertArrayEquals(secondBlock, second.codeBlock());
+    }
+
+    @Test
+    void a_branch_if_0_will_create_a_node_with_2_children_for_when_the_branch_is_taken_and_for_when_it_isnt()
+    {
+        var bc = new ByteCode[]
+            {
+                new ByteCode(ByteCode.Type.NOP),
+                new ByteCode(ByteCode.Type.BR_IF_0, 3),
+                new ByteCode(ByteCode.Type.LOAD_VALUE, 1),
+                new ByteCode(ByteCode.Type.LOAD_VALUE, 2)
+            };
+
+        var conditionBlock = new ByteCode[]
+            {
+                new ByteCode(ByteCode.Type.NOP),
+                new ByteCode(ByteCode.Type.BR_IF_0, 3),
+            };
+
+        var branchNotTakenBlock = new ByteCode[]
+            {
+                new ByteCode(ByteCode.Type.LOAD_VALUE, 1)
+            };
+
+        var branchTakenBlock = new ByteCode[]
+            {
+                new ByteCode(ByteCode.Type.LOAD_VALUE, 2)
+            };
+
+        var cfg = new CFG(bc);
+        var root = cfg.root();
+        assertNotNull(root);
+
+
+        var branchNotTaken = root.next.get(0);
+        assertNotNull(branchNotTaken);
+
+        var branchTaken = root.next.get(1);
+        assertNotNull(branchTaken);
+
+        assertArrayEquals(conditionBlock, root.codeBlock());
+        assertArrayEquals(branchNotTakenBlock, branchNotTaken.codeBlock());
+        assertArrayEquals(branchTakenBlock, branchTaken.codeBlock());
+        assertEquals(branchTaken, branchNotTaken.next.get(0));
     }
 }

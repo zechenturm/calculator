@@ -36,6 +36,11 @@ public class ByteCode
         return type == ByteCode.Type.JUMP || type == ByteCode.Type.BR_IF_0;
     }
 
+    public boolean isBranch()
+    {
+        return type == Type.BR_IF_0;
+    }
+
     @Override
     public boolean equals(Object other)
     {

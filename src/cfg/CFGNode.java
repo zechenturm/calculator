@@ -2,13 +2,14 @@ package cfg;
 
 import machine.ByteCode;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class CFGNode
 {
     public ByteCode[] code;
 
-    public CFGNode next;
+    public ArrayList<CFGNode> next = new ArrayList<>();
 
     public int lastByteCodeIndex;
 

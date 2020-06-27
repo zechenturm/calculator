@@ -41,7 +41,13 @@ public class CFG
                 var to = code[from].data - 1;
                 splits.add(from);
                 splits.add(to);
+                if (code[from].isBranch())
+                {
+                    edges.add(new Edge(from, from + 1));
+                    edges.add(new Edge(to, to + 1));
+                }
                 edges.add(new Edge(from, to + 1));
+
             }
         }
     }
@@ -81,7 +87,7 @@ public class CFG
         for ( var edge : edges)
         {
             var from = indexToNode(edge.from);
-            from.next = indexToNode(edge.to);
+            from.next.add(indexToNode(edge.to));
         }
     }
 
