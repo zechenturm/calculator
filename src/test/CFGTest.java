@@ -40,12 +40,12 @@ public class CFGTest
     }
 
     @Test
-    void a_jump_splits_the_code_into_2_code_blocks()
+    void a_jump_to_the_next_instruction_splits_the_code_into_2_code_blocks()
     {
         var bc = new ByteCode[]
         {
             new ByteCode(ByteCode.Type.NOP),
-            new ByteCode(ByteCode.Type.JUMP, 3),
+            new ByteCode(ByteCode.Type.JUMP, 2),
             new ByteCode(ByteCode.Type.NOP),
             new ByteCode(ByteCode.Type.NOP)
         };
@@ -53,21 +53,22 @@ public class CFGTest
         var firstBlock = new ByteCode[]
             {
                 new ByteCode(ByteCode.Type.NOP),
-                new ByteCode(ByteCode.Type.JUMP, 3),
+                new ByteCode(ByteCode.Type.JUMP, 2),
             };
 
         var secondBlock = new ByteCode[]
             {
                 new ByteCode(ByteCode.Type.NOP),
-                new ByteCode(ByteCode.Type.NOP),
+                new ByteCode(ByteCode.Type.NOP)
             };
 
         var cfg = new CFG(bc);
         var root = cfg.root();
+        assertNotNull(root);
 
-        assertNotNull(root.next);
 
         var second = root.next;
+        assertNotNull(second);
 
         assertArrayEquals(firstBlock, root.codeBlock());
         assertArrayEquals(secondBlock, second.codeBlock());
