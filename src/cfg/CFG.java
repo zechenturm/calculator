@@ -3,7 +3,6 @@ package cfg;
 import machine.ByteCode;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.TreeSet;
 
 public class CFG
@@ -52,15 +51,19 @@ public class CFG
         splits.add(code.length - 1);
         var last = 0;
         for(var current : splits)
-        {
-            var size = current - last+1;
+            last = createNode(last, current);
+    }
+
+    private int createNode(int last, int current)
+    {
+        var size = current - last+1;
 //            System.out.println("cur: " +  current + " last: " + last + " size: " + size);
-            var node = new CFGNode(new ByteCode[size]);
-            System.arraycopy(code, last, node.codeBlock(), 0, size);
-            node.lastByteCodeIndex = current;
-            nodes.add(node);
-            last = ++current;
-        }
+        var node = new CFGNode(new ByteCode[size]);
+        System.arraycopy(code, last, node.codeBlock(), 0, size);
+        node.lastByteCodeIndex = current;
+        nodes.add(node);
+        last = ++current;
+        return last;
     }
 
     private CFGNode indexToNode(int index)
