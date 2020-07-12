@@ -158,6 +158,9 @@ public class CFGTest
         assertArrayEquals(branchNotTakenBlock, branchNotTaken.codeBlock());
         assertArrayEquals(branchTakenBlock, branchTaken.codeBlock());
         assertEquals(branchTaken, branchNotTaken.next.get(0));
+        assertEquals(branchNotTaken, branchTaken.previous.get(1));
+        assertEquals(root, branchTaken.previous.get(0));
+        assertEquals(root, branchNotTaken.previous.get(0));
     }
 
     @Test
