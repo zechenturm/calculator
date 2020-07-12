@@ -212,4 +212,22 @@ public class CFGTest
         assertArrayEquals(elseBlock, elseNode.code);
         assertArrayEquals(restBlock, restNode.code);
     }
+
+    @Test
+    void all_next_nodes_have_the_current_node_as_previous()
+    {
+        var bc = new ByteCode[]
+            {
+                new ByteCode(ByteCode.Type.NOP),
+                new ByteCode(ByteCode.Type.JUMP, 2),
+                new ByteCode(ByteCode.Type.NOP),
+                new ByteCode(ByteCode.Type.NOP)
+            };
+
+        var cfg = new CFG(bc);
+        var root = cfg.root();
+        var second = root.next.get(0);
+        assertEquals(root, second.previous.get(0));
+
+    }
 }

@@ -83,7 +83,10 @@ public class CFG
         for (var edge : edges)
         {
             var from = indexToNode(edge.from);
-            from.next.add(indexToNode(edge.to));
+            var to = indexToNode(edge.to);
+            from.next.add(to);
+            to.previous.add(from);
+
         }
     }
 
