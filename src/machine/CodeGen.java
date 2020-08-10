@@ -68,26 +68,26 @@ public class CodeGen implements AbstractMachine
 
     public void add()
     {
-        calcStackSize(-2);
+        calcStackSize(-1);
         code.add(new ByteCode(ByteCode.Type.ADD, 0));
     }
 
     @Override
     public void subtract()
     {
-        calcStackSize(-2);
+        calcStackSize(-1);
         code.add(new ByteCode(ByteCode.Type.SUB, 0));
     }
 
     public void multiply()
     {
-        calcStackSize(-2);
+        calcStackSize(-1);
         code.add(new ByteCode(ByteCode.Type.MUL, 0));
     }
 
     public void divide()
     {
-        calcStackSize(-2);
+        calcStackSize(-1);
         code.add(new ByteCode(ByteCode.Type.DIV, 0));
     }
 
